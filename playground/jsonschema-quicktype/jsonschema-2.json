@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cloud Resource Type",
+  "description": "Defines the allowed cloud resource types for AWS and GCP",
+  "type": "string",
+  "enum": [
+    "AWS_EC2",
+    "AWS_IAM",
+    "AWS_RDS",
+    "GCP_CLOUD_SQL",
+    "GCP_GCE",
+    "GCP_GCS"
+  ],
+  "examples": ["AWS_EC2", "GCP_CLOUD_SQL"]
+}

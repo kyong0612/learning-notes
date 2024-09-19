@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "awsCloudResourceType": {
+      "type": "string",
+      "enum": ["AWS_EC2", "AWS_IAM", "AWS_RDS"],
+      "description": "AWSクラウドリソースのタイプ"
+    },
+    "gcpCloudResourceType": {
+      "type": "string",
+      "enum": ["GCP_CLOUD_SQL", "GCP_GCE", "GCP_GCS"],
+      "description": "GCPクラウドリソースのタイプ"
+    }
+  },
+  "additionalProperties": false,
+  "required": ["awsCloudResourceType", "gcpCloudResourceType"]
+}
