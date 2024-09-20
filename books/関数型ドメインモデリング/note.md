@@ -444,5 +444,3 @@ type Payment = {
 ```f#
 type PaymInvoice = UnpaidInvoice -> Payment -> PaidInvoice
 ```
-
-### 4.6 省略可能な値、エラー、およびコレクションのモデリング
