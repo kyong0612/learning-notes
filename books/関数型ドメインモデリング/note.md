@@ -387,3 +387,62 @@ let add x y = x + y // 型シグネチャ: int -> int -> int
 
 - 概念的には、型の中のものは、どんな種類のものでも、現実でも仮装でもよい
 ![alt text](<assets/CleanShot 2024-09-18 at 18.23.01@2x.png>)
+
+### 4.3 型の合成
+
+- 関数プログラミグでは、関数型設計の基礎となる「合成（コンポジション）」という言葉がよく使われる
+- F#では2つの方法で小さな型から新しい型が作られる
+  - ANDでまとめられる
+    - ANDをつかって作られた型を**直積型**と呼ぶ
+    - ORをつかって作られた型を**直和型**や**タグ付き共用体**と呼ぶ
+  - ORでまとめられる
+
+#### 4.3.3 単純型
+
+- 次のように選択肢が1つしかない選択肢を定義することがよくある
+
+```f#
+type ProductCode = ProductCode of string
+```
+
+- なぜこのような型を作るのか
+　- プリミティブ(stringやintなど)を内部の値として含む型である「ラッパー」を簡単に作れるから
+
+### 4.5 型の合成によるドメインモデルの構築
+
+- Eコーマスサイトの支払いを追跡する例
+
+```f#
+type CheckNumber = CheckNumber of int
+type CardNumber = CardNumber of string
+
+type CardType = Visa | MasterCard  // 'OR'型
+
+type CreaditCard = { // 'AND'型
+    CardNumber: CardNumber
+    CardType: CardType
+}
+
+type PaymentMethod =
+    | Cash
+    | Check of CheckNumber
+    | CreditCard of CreaditCard
+
+type PaymentAmount = PaymentAmount of decimal
+type Currency = EUR | USD 
+
+type Payment = {
+    Amount: PaymentAmount
+    Currency: Currency
+    Method: PaymentMethod
+}
+```
+
+- このモデルはオブジェクト指向モデルではなく、関数型モデルなので、これらの型に直接関連する動作はない
+- 例えば、Payment型を使って未払いの請求書の支払い処理をして、最終的には支払い済みの請求書になる方法を示したい場合、次のような関数型を定義できる
+
+```f#
+type PaymInvoice = UnpaidInvoice -> Payment -> PaidInvoice
+```
+
+### 4.6 省略可能な値、エラー、およびコレクションのモデリング
