@@ -629,3 +629,165 @@ type MoneyTransfer = {
 - ドメイン内のデータの信頼性を確保する方法を学んだ
   - 単純な型に対しては「スマートコントラクタ」を、より複雑な型に対しては「不正な状態は表現できないようにする」を組み合わせることで、型システム全体を使って多くの種類の完全性ルールを適用でき、より自己文書化されたコードになり、ユニットテストの必要性も少なくなることがわかった
 - 単一の集約内で作業していない場合は、即時的な整合性ではなく結果整合性を考慮して設計する必要があると結論づけた
+
+## 7章　パイプラインによるワークフローのモデリング
+
+- 型を使ったドメインモデリングの一般的な手法を注文確定ワークフローに適用していく
+- その過程で、あらゆるワークフローをモデル化するのに有効なテクニックをいくつか見ていく
+
+```
+workflow "Place Order" = 
+  input: UnvalidatedOrder
+  output (on success):
+    OrderAcknowledgementSent
+    AND OrderPlaced (to send to  shipping)
+    AND BillableOrderPlaced(to send to billing)
+  output (on error):
+    ValidationError
+
+  // ステップ1
+  do ValidateOrder
+  If order is invalid then:
+    return with ValidationError
+  
+  // ステップ2
+  do PriceOrder
+
+  // ステップ3
+  do AcknowledgeOrder
+
+  // ステップ4
+  create and return the events
+```
+
+![alt text](<assets/CleanShot 2024-09-26 at 21.32.01@2x.png>)
+
+- ビジネスプロセスを表す「パイプライン」を作成し、それをさらに小さな「パイプ」の集合体として構築する
+- このようなプログラミングのスタイルは「変換指向プログラミング」と呼ぶ
+
+### 7.1 ワークフローの入力
+
+- ワークフローの入力は、常にドメインオブジェクトでなければならない
+  - 入力はすでにデータ転送オブジェクトからデシリアライズされているものとする
+
+```
+type UnvalidatedOrder = {
+  OrderId: string
+  CustomerInfo: UnvaludatedCustomerInfo
+  ShippingAddress: UnvalidatedAddress
+}
+```
+
+#### 7.1.1 入力としてのコマンド
+
+- ワークフローはそれを開始するコマンドと関連している
+- ある意味では、ワークフローの本当の入力は、実際には注文書ではなく、コマンドなのです
+- このコマンドには、ワークフローがリクエストを処理するために必要なすべての内容が含まれていなければならない
+
+```
+type PlaceOrder = {
+  OrderFrom: UnvalidatedOrder
+  Timestamp: DateTime
+  UserId: string
+  // etc
+}
+```
+
+#### 7.1.2 ジェネリクスによる共通構造の共有
+
+```
+type Command<'data> = {
+  Data: 'data
+  Timestamp: DateTime
+  UserId: string
+  // etc
+}
+```
+
+そして、Dataスロットに入れる型を指定するだけで、ワークフロー固有のコマンドを生成できる
+
+```
+type PlaceOrder = Command<UnvalidatedOrder>
+```
+
+#### 7.1.3 複数のコマンドを1つの型にまとめる
+
+![alt text](<assets/CleanShot 2024-09-26 at 21.48.02@2x.png>)
+
+- 場合によっては、境界づけられたコンテキストの全てのコマンドが同じ入力チャネル(メッセージキューなど)で送信されることもあるため、それらをしリアライズできる1つのデータ構造に統一する方法が必要
+
+```
+type OrderTakingCommand =
+  | Place of PlaceOrder
+  | Cancel of CancelOrder
+  | Change of ChangeOrder
+```
+
+![alt text](<assets/CleanShot 2024-09-26 at 21.52.20@2x.png>)
+
+### 7.2 状態の集合による注文のモデリング
+
+![alt text](<assets/CleanShot 2024-09-26 at 21.54.19@2x.png>)
+
+- これらの状態をどのようにモデル化すれば良いのか?
+- 素朴なアプローチとしては、状態を全て別々のフラグで表現した、単一のレコード型を作成することが考えられる
+
+```
+type Order = {
+  OrderId: string
+  ...
+  IsValidated: bool // 検証時に設定される
+  IsPriced: bool // 価格計算時に設定される
+  AmountToBill: decimal option // 請求時に設定される
+  // etc
+}
+```
+
+- しかし、この方法には多くの問題がある
+  - システムには明らかに状態があり、さまざまなフラグで示されているが、状態は暗黙的で、処理するためにはおおくの　条件付きコードが必要
+  - いくつかの状態には、他の状態では必要とされないデータがあり、それらを全て1つのレコードに入れると設計が複雑になる。例えば、AmountToBillは「価格設定済み」状態でのみ必要だが、他の状態には存在しないため、フィールドを省略可能にする必要がある
+  - どのフィールドがどのフラグに対応するのかが明確ではない。IsPriced<価格設定されているか>が設定されている場合はAmountToBill<請求金額>も設定されている必要があるが、このルールを強制する設計は存在せず、コメントを見ながらデータの整合性を保つように注意しなければならない
+- ドメインをモデル化するためによりよい方法は、注文の各状態に対して新しい型を作成すること
+
+```
+data ValidatedOrder = 
+  ValidatedCustomerInfo
+  AND ValidatedShippingAddress
+  AND ValidatedBillingAddress
+  AND list of ValidateOrderLine
+```
+
+- そして、ValidatedOrderに対応する型定義を示す。素直に翻訳するとこのようになる。
+- (OrderIdが追加されているが、これは注文のアイデンティティをワークフロー全体で維持するために必要)
+
+```
+type ValidatedOrder = {
+  OrderId: string
+  CustomerInfo: UnvalidatedCustomerInfo
+  ShippingAddress: UnvalidatedAddress
+  BillingAddress: UnvalidatedAddress
+  OrderLines: UnvalidatedOrderLine list
+}
+```
+
+- PricedOrder<価格計算済みの注文>の方も同じように、価格情報のフィールドを追加して作成していく。
+
+```
+type PricedOrder = {
+  OrderId: string
+  CustomerInfo: CustomerInfo
+  ShippingAddress: Address
+  BillingAddress: Address
+  OrderLines: PricedOrderLine list
+  AmountToBill: BillingAmount
+}
+```
+
+- そこから1つ選択するトップレベルの型を作成できる
+
+```
+type Order = 
+  | Unvalidated of UnvalidatedOrder
+  | Validated of ValidatedOrder
+  | Priced of PricedOrder
+```
