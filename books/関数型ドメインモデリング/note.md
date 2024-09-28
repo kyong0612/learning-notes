@@ -791,3 +791,50 @@ type Order =
   | Validated of ValidatedOrder
   | Priced of PricedOrder
 ```
+
+### 7.3 ステートマシン
+
+- 状態を表すために、ステートマシンを使用することができる
+![alt text](<assets/CleanShot 2024-09-28 at 18.01.05@2x.png>)
+
+#### 7.3.1　なぜステートマシンを使うのか
+
+- それぞれの状態において、受け付けられる処理を変えられる
+- 全ての状態が明示的に文書化される
+- 起こりうる状態をすべて考慮に入れて設計するように強く促される
+
+#### 7.3.2 F#でシンプルなステートマシンを実装する方法
+
+```f#
+type Item = ...
+type ActiveCarData = { UnpaidItems: Item list}
+type PaidCartData = { PaidItems: Item list, Payment: float}
+
+type ShoppingCart = 
+  | EmptyCart // データなし
+  | ActiveCart of ActiveCartData
+  | PaidCart of PaidCartData
+
+let addItem cart item = 
+  match cart with
+  | EmptyCart -> ActiveCart { UnpaidItems = [item] }
+  | ActiveCart { UnpaidItems = existingItem } -> ActiveCart { UnpaidItems = item :: existingItem }
+  | PaidCart _ -> failwith "Cannot add items to a paid cart"
+
+
+let makePayment cart payment = 
+  match cart with
+  | EmptyCart -> failwith "Cannot pay for an empty cart"
+  | ActiveCart { UnpaidItems = items } -> PaidCart { PaidItems = items, Payment = payment }
+  | PaidCart _ -> failwith "Cannot pay for a paid cart"
+
+```
+
+### 7.10 まとめ
+
+- ワークフローへの入力を文書化し、特にコマンドをどのようにモデル化するかを検討した
+- 次に、ステートマシンを使って、文書のようにライフサイクルを持っているエンティティをどのようにモデル化するかを検討した
+- また、各ステップの依存関係やエフェクトを文書化することにも力を入れた
+- その過程で何百種類もの型を作ったように思う
+  - それは必要だったのか?
+  - これらの型を作らなかったら、検証済みの注文と価格設定された注文の違いや、装置コードと通常の文字列の違いを文書化しなければならない
