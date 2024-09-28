@@ -1,0 +1,6 @@
+columns format version: 1
+4 columns:
+`user_id` UInt32
+`message` String
+`timestamp` DateTime
+`metric` Float32
