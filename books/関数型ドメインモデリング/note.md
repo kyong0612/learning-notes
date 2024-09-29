@@ -858,3 +858,126 @@ let makePayment cart payment =
     - 関数型アプローチでは、再利用可能なコードを全て関数にまとめ、関数合成を使ってそれらを組み合わせる
 
 - 関数型プログラミングでは、別のパラダイムで生じる疑問(「コレクションをループするにはどうしたらよいか」「Strategyパターンを実装するにはどしたらいいか」など)にそのまま答えようとするのではなく、その擬婚が解説したかった根底の課題(「コレクションの各要素に対してアクションを実行するにはどうしたら良いか」「振る舞いをパラメータ化するにはどうしたらいいか」など)を解決しようとすると考えた方がよい
+
+#### 8.2 「もの」としての関数
+
+- 関数型プログラミングのパラダイムにおいて、関数はそれ自体が「もの」
+  - 他の関数のへの入力として渡せる
+
+![alt text](<assets/CleanShot 2024-09-29 at 21.04.19@2x.png>)
+![alt text](<assets/CleanShot 2024-09-29 at 21.06.26@2x.png>)
+
+```f#
+let plus3 x = x + 3
+let times2 x = x * 2
+let square = (fun x -> x * x)
+let addThree = plus3
+```
+
+- 3つ目の定義では、letキーワードを使って、無名関数(ラムダ式)にsquareという名前を割り当てている
+
+8.2.3 出力としての関数
+
+- 関数を返すことの重要な理由の1つは、関数に特定のパラメーターを「組み込めるということ」
+
+```f#
+let add1 x = x + 1
+let add2 x = x + 2
+let add3 x = x + 3
+```
+
+- 重複を解消したいと考える
+  - 「加算機ジェネレータ」つまり、加算する数が組み込まれた「加算」関数を返す関数を作成する
+
+```f#
+let adderGenerator nubmerToAdd = (fun x -> x + numberToAdd)
+let add1 = adderGenerator 1
+let add2 = adderGenerator 2
+let add3 = adderGenerator 3
+```
+
+##### 8.2.4 カリー化
+
+- この「関数を返す」という技を使えば、どんな多パラメータの関数でも、1パラメータの関数が連なったものに変換できる
+- この技術を「カリー化」と呼ぶ
+
+```f#
+// int -> int -> int
+let add = (fun x y -> x + y)
+// int -> (int -> int)
+let add = (fun x -> (fun y -> x + y))
+```
+
+##### 8.2.5 部分適用
+
+```f#
+// sayGreeting: string -> string -> uint
+let sayGreeting greeting name = printfn "%s, %s!" greeting name
+```
+
+- この関数を部分適用することで、新しい関数を作成できる
+
+```f#
+let sayHello = sayGreeting "Hello"
+let sayGoodbye = sayGreeting "Goodbye"
+```
+
+#### 8.3 全域関数
+
+- 数学の世界では、関数とはとりうる各入力に対して、それぞれ1つの出力に結びついているものを指す
+- 関数型プログラミングでも同じように、とりうる入力全てについて、対応する出力が1つずつ決まるように関数を設計しようと思う
+- このような関数を「全域関数」と呼ぶ
+
+```f#
+type NonZeroInt = 
+  // ゼロでない整数に制約されるように定義する
+  // スマートコンストラクタを追加するなど
+  private NonZeroInt of int
+
+// 制限された入力を行う
+let twelveDividedBy(NonZeroInt n) = 
+  match n with
+  |6 -> 2
+   ...
+   // 0は入力にないため、ここには含まれない
+
+// シグネチャー
+val twelveDividedBy: NonZeroInt -> int
+```
+
+```f#
+let twelveDividedBy n = 
+  match n with  
+  | 6 -> Some 2 //有効
+  | 5 -> Some 2 // 有効
+  | 4 -> Some 3 // 有効
+  ...
+  | 0 -> None // 無効
+
+// シグネチャー
+val twelveDividedBy: int -> int option
+```
+
+### 8.4 関数合成
+
+![alt text](<assets/CleanShot 2024-09-29 at 21.35.36@2x.png>)
+
+#### 8.4.1 関数からアプリケーション全体を構築する
+
+![alt text](<assets/CleanShot 2024-09-29 at 21.38.21@2x.png>)
+![alt text](<assets/CleanShot 2024-09-29 at 21.38.33@2x.png>)
+
+#### 8.4.3 関数を合成する上での課題
+
+- 関数を合成するときに、一方の関数の出力がもう一方の関数の入力と一致する場合は簡単
+- しかし、出力と入力が一致しない場合はどうするか
+  - このような場合、関数を合成するためには、中間関数を作成する必要がある
+
+```f#
+let add1 x = x + 1
+let times2 x = x * 2
+let square x = x * x
+
+let add1Times2 = (fun x -> times2 (add1 x))
+let add1Times2Square = (fun x -> square (times2 (add1 x)))
+```
