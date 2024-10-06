@@ -981,3 +981,110 @@ let square x = x * x
 let add1Times2 = (fun x -> times2 (add1 x))
 let add1Times2Square = (fun x -> square (times2 (add1 x)))
 ```
+
+### 9.9 まとめ
+
+- パイプラインの各ステップの実装と依存関係の処理に焦点を当てた
+- ステップを合成する際、肩γあ必ずしも一致しないことから、3つの重要な関数型プログラミング技術を導入した
+
+1. 「アダプター関数」を使用して、関数をある「形」から別の「形」に変換する
+2. 異なる型を共通の型に「持ち上げる」こと
+3. 部分適用を使用して依存関係を関数に組み込み、関数をより簡単に合成できるようにするとともに、不要な実装の詳細を呼び出し側から隠すこと
+
+## 第10章 実装:エラーの扱い
+
+### 10.1 Result型を使ってエラーを明示する
+
+- 関数型プログラミングの手法は、できるだけ物事を明示的にすることを重視しており、エラー処理についても同じことが言える
+- 残念なことに、コードないでエラーが2級市民のように扱われてしまうことがよくある
+- しかし、強固で本番稼働に適したシステムを構築するためには、エラーを一級市民として扱うべき
+- e.g)
+
+```f#
+type CheckAddressExists = 
+  UnvalidateAddress -> CheckedAddress
+```
+
+- これだけでは、どんなエラーが起こりうるのかが示されていないため、あまり役に多々ない
+- より望ましいのは、全域関数で、起こりうる結果が全て型シグネチャによって明示的に文書化されていること
+
+```f#
+type CheckAddressExists = 
+  UnvalidateAddress -> Result<CheckedAddress, AddressCheckError>
+
+and AddressCheckError = 
+  | InvalidFormat of string
+  | AddressNotFound of string
+```
+
+- 関数のシグネチャがドキュメントとして機能する
+
+### 10.2 ドメインエラーを扱う
+
+- エラーは3つのグループに分類できる
+  - `ドメインエラー`
+    - システムエラービジネスプロセスの一部として予想されるエラー
+    - ドメイン設計に含まれている必要がある
+  - `パニック`
+    - 処理不可能なシステムエラー(「メモリ不足」など)やプログラマーの見落としによるエラーなど、システムを不明な状態にするエラー
+  - `インフラストラクチャエラー`
+    - アーキテクチャの一部として予想されるエラーだが、ビジネスプロセスの一部ではなく、ドメインにもふうまれていない
+    - e.g) ネトワークタイムアウトや認証失敗など
+
+#### 10.2.1 型によるドメインエラーのモデリング
+
+```f#
+type CheckAddressExists = 
+  UnvalidateAddress -> Result<CheckedAddress, AddressCheckError>
+```
+
+### 10.3 Resultを生成する関数の連鎖
+
+-　モナディック関数
+![alt text](<assets/CleanShot 2024-10-06 at 22.11.36@2x.png>)
+
+#### 10.3.1 アダプターブロックの実装
+
+- このような関数を合成するために、アダプターブロックを作成することができる
+
+```f#
+let bind switchFn = 
+  fun twoTrackInput ->
+    match twoTrackInput with
+    | Ok success -> switchFn success
+    | Error failure -> Error failure
+```
+
+#### 10.3.3 合成と型チェック
+
+```f#
+type FunctionA = Apple -> Result<Bananas, ErrorA>
+type FunctionB = Bananas -> Result<Cherries, ErrorB>
+type FunctionC = Cherries -> Result<Lemon, ErrorC>
+
+let functionA: FunctionA = ...
+let functionB: FunctionB = ...
+let functionC: FunctionC = ...
+
+let functionABC input =
+  input
+  |> functionA
+  |> Result.bind functionB
+  |> Result.bind functionC
+```
+
+### 10.7 モナドなど
+
+- モナドとは
+  - プログラミングパターンの一つで、「モナディック」な関数を直列に繋げることができるものをさす
+  - 「モナディック」とは？
+    - 「通常」の値を受け取り、ある種の「拡張」された値を返す関数
+  - 技術的には「モナド」とは単に、3つの要素を持ったもの
+    - データ構造
+    - 関連するいくつかの関数
+    - 関数がどのように動作しなければならないかについてのいくつかのルール
+- 関数がどのように動作すべきかのルールは「モナド則」と呼ばれる
+
+#### 10.7.1 アプリかティブを使って並列に合成する
+
+- モナドのようにモナディック関数を直列に繋げるのではなく、モナディックな値を並列に組み合わせることが可能
