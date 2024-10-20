@@ -1,0 +1,37 @@
+---
+labels: ['my-project-react-service', 'graphql', 'server', 'microservice', 'apollo']
+description: 'The Acme corporate micro-service'
+---
+
+A Corporate micro-service component. Provides a GraphQL and REST APIs for accessing corporate information from services and apps across the Acme platform.
+
+## Run the server 
+
+Import the platform and use the it in your workspace:
+
+```bash
+bit use my-project-react-service
+```
+
+Run the server:
+```bash
+bit run my-project-react-service
+```
+
+## Compose to your platform
+
+You can compose the server to a Platform app. Use the platform application type in a Bit app `my-platform.bit-app.ts` and include your server:
+```ts
+import { Platform } from '@bitdev/platforms.platform';
+
+export const MyPlatform = Platform.from({
+  name: 'my-platform',
+
+  backends: {
+    main: new AcmeGateway(),
+    services: [
+      MyProjectReactService,
+    ]
+  },
+});
+```
