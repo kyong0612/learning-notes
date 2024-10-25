@@ -1,0 +1,9 @@
+# Nmap 7.95 scan initiated Fri Oct 25 21:02:20 2024 as: nmap -sV -Pn -oN nmap.txt -v 10.10.97.157
+Nmap scan report for 10.10.97.157
+Host is up.
+All 1000 scanned ports on 10.10.97.157 are in ignored states.
+Not shown: 1000 filtered tcp ports (no-response)
+
+Read data files from: /opt/homebrew/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+# Nmap done at Fri Oct 25 21:09:16 2024 -- 1 IP address (1 host up) scanned in 416.07 seconds
