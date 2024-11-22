@@ -1,0 +1,17 @@
+{
+	auto_https off
+}
+
+:3000 {
+	handle_path /* {
+		reverse_proxy frontend1:3001
+	}
+
+	handle /app2* {
+		reverse_proxy frontend2:3002
+	}
+
+	handle /docs* {
+		reverse_proxy remix.run
+	}
+}

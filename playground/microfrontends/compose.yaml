@@ -1,0 +1,34 @@
+services:
+  frontend1:
+    container_name: frontend1
+    build: ./frontend1
+    ports:
+      - "3001:3001"
+    environment:
+      - PORT=3001
+    networks:
+      - app
+  frontend2:
+    container_name: frontend2
+    build: ./frontend2
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+    networks:
+      - app
+  caddy:
+    container_name: caddy
+    image: caddy:2.8
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - $PWD/Caddyfile:/etc/caddy/Caddyfile
+    links:
+      - frontend1
+      - frontend2
+    networks:
+      - app
+networks:
+  app:
