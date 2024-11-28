@@ -58,3 +58,112 @@ conn, err := net.Dial("unix", "socketfile")
 Sources
 [1]  <https://ascii.jp/elem/000/001/415/1415088/>
 [2] Unixドメインソケット (1/2) <https://ascii.jp/elem/000/001/415/1415088/>
+
+---
+
+## サーバー側（Golang）の実装
+
+**基本的なHTTPサーバー**
+
+```go
+package main
+
+import (
+    "net"
+    "net/http"
+    "os"
+)
+
+const socketPath = "/tmp/app.sock"
+
+func main() {
+    // ソケットファイルが存在する場合は削除
+    os.Remove(socketPath)
+    
+    // Unixドメインソケットでリスナーを作成
+    listener, err := net.Listen("unix", socketPath)
+    if err != nil {
+        panic(err)
+    }
+    defer listener.Close()
+
+    // HTTPハンドラーの設定
+    mux := http.NewServeMux()
+    mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("Hello from Go server!"))
+    })
+
+    // サーバーの起動
+    http.Serve(listener, mux)
+}
+```
+
+## クライアント側（Node.js）の実装
+
+**ソケット通信クライアント**
+
+```javascript
+const net = require('net');
+
+const SOCKET_PATH = '/tmp/app.sock';
+
+// クライアントの作成
+const client = net.createConnection(SOCKET_PATH);
+
+// 接続イベントのハンドリング
+client.on('connect', () => {
+    console.log('Connected to server');
+    
+    // HTTPリクエストの送信
+    client.write('GET / HTTP/1.1\r\n\r\n');
+});
+
+// データ受信のハンドリング
+client.on('data', (data) => {
+    console.log('Received:', data.toString());
+});
+
+// エラーハンドリング
+client.on('error', (err) => {
+    console.error('Error:', err.message);
+});
+
+// 接続終了のハンドリング
+client.on('end', () => {
+    console.log('Disconnected from server');
+});
+```
+
+## 注意点
+
+**セキュリティ設定**
+
+- ソケットファイルのパーミッションを適切に設定
+- 不要になったソケットファイルは確実に削除
+
+**エラーハンドリング**
+
+- サーバー側での適切なシグナルハンドリング
+- クライアント側での再接続ロジックの実装
+
+**クリーンアップ処理**
+
+```go
+// Goサーバーでのクリーンアップ
+c := make(chan os.Signal, 1)
+signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+go func() {
+    <-c
+    os.Remove(socketPath)
+    os.Exit(0)
+}()
+```
+
+このように、異なる言語間でもUnixドメインソケットを使用することで効率的な通信が実現できます。
+
+Sources
+[1] Understanding Unix Domain Sockets in Golang - DEV Community <https://dev.to/douglasmakey/understanding-unix-domain-sockets-in-golang-32n8>
+[2] unix domain socketをGoで実装する <https://zenn.dev/ymktmk/scraps/1b7b543559e87a>
+[3] Example of Interprocess communication in Node.js through a UNIX ... <https://gist.github.com/Xaekai/e1f711cb0ad865deafc11185641c632a>
+[4] Node.jsでもUNIXドメインソケットを使いたい - Qiita <https://qiita.com/walk8243/items/49ce3fc24500038f126f>
+[5] Example of Interprocess communication in Node.js ... - GitHub Gist <https://gist.github.com/wongpiwat/2cd34f9c316e0c379a076222436835c1>
