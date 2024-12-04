@@ -1,0 +1,1 @@
+# Google Domainsのサービス終了とSquarespace Domainsへのドメイン移行について の画像ファイル等を配置する
