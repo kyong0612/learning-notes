@@ -18,3 +18,10 @@ create-new-article:
 	echo "Created article structure for '$$title':"
 	@tree "articles/$$title"
 
+.PHONY: create-new-movie
+create-new-movie:
+	@read -p "Enter title: " title; \
+	mkdir -p "movies/$$title"; \
+	cp "templates/template_note.md" "movies/$$title/note.md";  
+	@tree "movies" 
+
