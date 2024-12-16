@@ -23,3 +23,5 @@ ref: <https://speakerdeck.com/knih/architectures-and-topologies>
 - アプリケーションやドメインを跨ぐアーキテクチャ意思決定をどうするか
 
 ![alt text](<assets/CleanShot 2024-12-15 at 19.02.52@2x.png>)
+
+![alt text](<assets/CleanShot 2024-12-16 at 22.06.43@2x.png>)
