@@ -25,3 +25,9 @@ create-new-movie:
 	cp "templates/template_note.md" "movies/$$title/note.md";  
 	@tree "movies" 
 
+.PHONY: create-new-research
+create-new-research:
+	@read -p "Enter title: " title; \
+	mkdir -p "researches/$$title"; \
+	cp "templates/template_note.md" "researches/$$title/note.md";  
+	@tree "researches" 
