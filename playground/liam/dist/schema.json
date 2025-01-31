@@ -1,0 +1,562 @@
+{
+  "tables": {
+    "public.departments": {
+      "name": "public.departments",
+      "comment": null,
+      "columns": {
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "default": "nextval('departments_department_id_seq'::regclass)",
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "department_name": {
+          "name": "department_name",
+          "type": "varchar(50)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": true,
+          "notNull": true
+        },
+        "department_code": {
+          "name": "department_code",
+          "type": "varchar(10)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": true,
+          "notNull": true
+        },
+        "location": {
+          "name": "location",
+          "type": "varchar(50)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        }
+      },
+      "indices": {
+        "departments_pkey": {
+          "name": "departments_pkey",
+          "unique": true,
+          "columns": [
+            "department_id"
+          ]
+        },
+        "uq_department_name": {
+          "name": "uq_department_name",
+          "unique": true,
+          "columns": [
+            "department_name"
+          ]
+        },
+        "uq_department_code": {
+          "name": "uq_department_code",
+          "unique": true,
+          "columns": [
+            "department_code"
+          ]
+        }
+      }
+    },
+    "public.clients": {
+      "name": "public.clients",
+      "comment": null,
+      "columns": {
+        "client_id": {
+          "name": "client_id",
+          "type": "integer",
+          "default": "nextval('clients_client_id_seq'::regclass)",
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "client_name": {
+          "name": "client_name",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "contact_email": {
+          "name": "contact_email",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": true,
+          "notNull": true
+        }
+      },
+      "indices": {
+        "clients_pkey": {
+          "name": "clients_pkey",
+          "unique": true,
+          "columns": [
+            "client_id"
+          ]
+        },
+        "clients_contact_email_key": {
+          "name": "clients_contact_email_key",
+          "unique": true,
+          "columns": [
+            "contact_email"
+          ]
+        }
+      }
+    },
+    "public.employees": {
+      "name": "public.employees",
+      "comment": null,
+      "columns": {
+        "employee_id": {
+          "name": "employee_id",
+          "type": "integer",
+          "default": "nextval('employees_employee_id_seq'::regclass)",
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "varchar(50)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "varchar(50)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": true,
+          "notNull": true
+        },
+        "hire_date": {
+          "name": "hire_date",
+          "type": "date",
+          "default": "CURRENT_DATE",
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "salary": {
+          "name": "salary",
+          "type": "numeric(10,2)",
+          "default": 3000,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "manager_id": {
+          "name": "manager_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        }
+      },
+      "indices": {
+        "employees_pkey": {
+          "name": "employees_pkey",
+          "unique": true,
+          "columns": [
+            "employee_id"
+          ]
+        },
+        "uq_employee_email": {
+          "name": "uq_employee_email",
+          "unique": true,
+          "columns": [
+            "email"
+          ]
+        }
+      }
+    },
+    "public.projects": {
+      "name": "public.projects",
+      "comment": null,
+      "columns": {
+        "project_id": {
+          "name": "project_id",
+          "type": "integer",
+          "default": "nextval('projects_project_id_seq'::regclass)",
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "project_name": {
+          "name": "project_name",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar(20)",
+          "default": "'Proposed'::character varying",
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "default": "CURRENT_DATE",
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        },
+        "client_id": {
+          "name": "client_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        }
+      },
+      "indices": {
+        "projects_pkey": {
+          "name": "projects_pkey",
+          "unique": true,
+          "columns": [
+            "project_id"
+          ]
+        }
+      }
+    },
+    "public.employee_projects": {
+      "name": "public.employee_projects",
+      "comment": null,
+      "columns": {
+        "employee_id": {
+          "name": "employee_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "project_id": {
+          "name": "project_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        }
+      },
+      "indices": {
+        "employee_projects_pkey": {
+          "name": "employee_projects_pkey",
+          "unique": true,
+          "columns": [
+            "employee_id",
+            "project_id"
+          ]
+        }
+      }
+    },
+    "public.tasks": {
+      "name": "public.tasks",
+      "comment": null,
+      "columns": {
+        "task_id": {
+          "name": "task_id",
+          "type": "integer",
+          "default": "nextval('tasks_task_id_seq'::regclass)",
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "task_name": {
+          "name": "task_name",
+          "type": "varchar(100)",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "due_date": {
+          "name": "due_date",
+          "type": "date",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "varchar(10)",
+          "default": "'Medium'::character varying",
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "project_id": {
+          "name": "project_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": true
+        },
+        "assigned_to": {
+          "name": "assigned_to",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        }
+      },
+      "indices": {
+        "tasks_pkey": {
+          "name": "tasks_pkey",
+          "unique": true,
+          "columns": [
+            "task_id"
+          ]
+        }
+      }
+    },
+    "public.job_history": {
+      "name": "public.job_history",
+      "comment": null,
+      "columns": {
+        "employee_id": {
+          "name": "employee_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "date",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": true,
+          "unique": false,
+          "notNull": true
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "date",
+          "default": null,
+          "check": null,
+          "comment": null,
+          "primary": false,
+          "unique": false,
+          "notNull": false
+        }
+      },
+      "indices": {
+        "job_history_pkey": {
+          "name": "job_history_pkey",
+          "unique": true,
+          "columns": [
+            "employee_id",
+            "department_id",
+            "start_date"
+          ]
+        }
+      }
+    }
+  },
+  "relationships": {
+    "public.departments_department_id_to_public.employees_department_id": {
+      "name": "public.departments_department_id_to_public.employees_department_id",
+      "primaryTableName": "public.departments",
+      "primaryColumnName": "department_id",
+      "foreignTableName": "public.employees",
+      "foreignColumnName": "department_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.employees_employee_id_to_public.employees_manager_id": {
+      "name": "public.employees_employee_id_to_public.employees_manager_id",
+      "primaryTableName": "public.employees",
+      "primaryColumnName": "employee_id",
+      "foreignTableName": "public.employees",
+      "foreignColumnName": "manager_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.clients_client_id_to_public.projects_client_id": {
+      "name": "public.clients_client_id_to_public.projects_client_id",
+      "primaryTableName": "public.clients",
+      "primaryColumnName": "client_id",
+      "foreignTableName": "public.projects",
+      "foreignColumnName": "client_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.employees_employee_id_to_public.employee_projects_employee_id": {
+      "name": "public.employees_employee_id_to_public.employee_projects_employee_id",
+      "primaryTableName": "public.employees",
+      "primaryColumnName": "employee_id",
+      "foreignTableName": "public.employee_projects",
+      "foreignColumnName": "employee_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.projects_project_id_to_public.employee_projects_project_id": {
+      "name": "public.projects_project_id_to_public.employee_projects_project_id",
+      "primaryTableName": "public.projects",
+      "primaryColumnName": "project_id",
+      "foreignTableName": "public.employee_projects",
+      "foreignColumnName": "project_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.employees_employee_id_to_public.tasks_assigned_to": {
+      "name": "public.employees_employee_id_to_public.tasks_assigned_to",
+      "primaryTableName": "public.employees",
+      "primaryColumnName": "employee_id",
+      "foreignTableName": "public.tasks",
+      "foreignColumnName": "assigned_to",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.projects_project_id_to_public.tasks_project_id": {
+      "name": "public.projects_project_id_to_public.tasks_project_id",
+      "primaryTableName": "public.projects",
+      "primaryColumnName": "project_id",
+      "foreignTableName": "public.tasks",
+      "foreignColumnName": "project_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.departments_department_id_to_public.job_history_department_id": {
+      "name": "public.departments_department_id_to_public.job_history_department_id",
+      "primaryTableName": "public.departments",
+      "primaryColumnName": "department_id",
+      "foreignTableName": "public.job_history",
+      "foreignColumnName": "department_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    },
+    "public.employees_employee_id_to_public.job_history_employee_id": {
+      "name": "public.employees_employee_id_to_public.job_history_employee_id",
+      "primaryTableName": "public.employees",
+      "primaryColumnName": "employee_id",
+      "foreignTableName": "public.job_history",
+      "foreignColumnName": "employee_id",
+      "cardinality": "ONE_TO_MANY",
+      "updateConstraint": "NO_ACTION",
+      "deleteConstraint": "NO_ACTION"
+    }
+  }
+}

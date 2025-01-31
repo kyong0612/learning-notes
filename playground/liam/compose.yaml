@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17
+    container_name: local_postgres
+    environment:
+      POSTGRES_USER: testuser
+      POSTGRES_PASSWORD: testpass
+      POSTGRES_DB: testdb
+      
+    ports:
+      - "5432:5432"
+    volumes:
+      # init.sqlを自動で実行するためにマウントする
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    # 永続化したい場合はデータ用のVolumeを設定する
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U testuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  tbls:
+    image: ghcr.io/k1low/tbls
+    container_name: tbls_client
+    depends_on:
+      - db
+        # condition: service_healthy
+    volumes:
+      - ./tbls:/work
+    working_dir: /work
+    # tbls コマンドを実行して、そのまま終了するイメージ(初回はinit.sqlの実行でerror)
+    command: [
+      "doc",
+      "postgres://testuser:testpass@db:5432/testdb?sslmode=disable"
+    ]
+
+volumes:
+  db_data:
+    driver: local
