@@ -1,0 +1,25 @@
+# チームトポロジーで紐解くプロダクト開発組織の進化とスケーリング
+
+ref: <https://slide.meguro.ryuzee.com/slides/124>
+
+![alt text](<assets/CleanShot 2025-02-19 at 15.52.49@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.53.03@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.54.59@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.55.55@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.56.17@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.56.31@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.56.53@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.57.18@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.57.59@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.58.51@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 15.59.33@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.01.03@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.01.18@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.01.45@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.02.04@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.02.18@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.02.29@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.02.39@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.02.52@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.03.03@2x.png>)
+![alt text](<assets/CleanShot 2025-02-19 at 16.03.15@2x.png>)
