@@ -1,0 +1,38 @@
+{
+  "name": "langgraph-agent",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "forecast": "tsx forecast.ts",
+    "diagram": "tsx diagram.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.5.2",
+  "dependencies": {
+    "@langchain/community": "0.3.34",
+    "@langchain/core": "0.3.42",
+    "@langchain/langgraph": "0.2.53",
+    "@langchain/openai": "0.4.4",
+    "install": "0.13.0",
+    "npm": "11.1.0",
+    "tslab": "^1.0.22",
+    "tsx": "^4.19.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "^22.13.9"
+  },
+  "pnpm": {
+    "ignoredBuiltDependencies": [
+      "zeromq"
+    ],
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild",
+      "zeromq"
+    ]
+  }
+}
