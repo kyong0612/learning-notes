@@ -2,7 +2,7 @@
 
 ref: <https://www.builder.io/blog/ai-dev-skill>
 
-### AIと開発スキルの関係
+## AIと開発スキルの関係
 
 この記事は、AIが開発者のスキルを陳腐化させるのではなく、むしろその価値を高めていることを論じています。著者のSteve Sewellは、AIの進化にもかかわらず開発スキルがますます重要になっている理由を、興味深いグラフと実例を交えて説明しています。
 
@@ -10,7 +10,7 @@ ref: <https://www.builder.io/blog/ai-dev-skill>
 
 これは一つの製品だけの現象ではなく、非開発者に一定のコーディング能力を与えるすべての製品に影響します。最近の[AIモデルの進歩が頭打ちになっている](https://www.builder.io/blog/ai-lie)ことを考えると、この状況はすぐには、あるいは永遠に変わらないかもしれません。
 
-### 「死の谷」と「死のプラトー」
+## 「死の谷」と「死のプラトー」
 
 ![bolt, cursor, builder.io logos](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F55d7040abb3b4a03a97d681728f4ab46?width=705)
 
@@ -24,7 +24,7 @@ ref: <https://www.builder.io/blog/ai-dev-skill>
 
 どちらの場合も、唯一の解決策は開発者が直接コードに手を入れ、AIが対処できなかった問題を修正することです。
 
-### AIツールの限界
+## AIツールの限界
 
 ![Graph showing a developer helping recover from the bit of detah](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F191c7eb6b87b48a9838a298e8ac92fe9?width=705)
 
@@ -36,7 +36,7 @@ ref: <https://www.builder.io/blog/ai-dev-skill>
 
 ![Image showing a conversion from tools like bolt to tools like Cursor](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Fee7a03b51c2b409da0ccac2c28ccdee3?width=705)
 
-### AIコーディングツールの実用的な価値
+## AIコーディングツールの実用的な価値
 
 これは、コーディングスキルを必要としないAIツールに価値がないという意味ではありません。これらのツールは以下のような用途で非常に役立ちます：
 
@@ -46,7 +46,7 @@ ref: <https://www.builder.io/blog/ai-dev-skill>
 - シンプルな内部ツール作成
 - 価格計算機などの小規模アプリケーション
 
-### 開発者の課題とAIの解決策
+## 開発者の課題とAIの解決策
 
 開発者として著者が最も苦痛に感じる2つのことは：
 
@@ -63,7 +63,7 @@ AIを活用した迅速なプロトタイピングによって、実際に構築
 
 ![a loop of idea and testing](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2Ff1e65f10a3cb434fa90363c951c529cb?width=705)
 
-### CSSの将来と自動化
+## CSSの将来と自動化
 
 著者は、プログラミング自体がなくなることはないが、今後数年で手書きのCSSコードが大幅に減少すると予測しています。
 
@@ -73,7 +73,7 @@ AIを活用した迅速なプロトタイピングによって、実際に構築
 
 !["the app in figma" vs "the app in prod" meme](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F6233ab72b55e4799b36cb6a8e53c15c6?width=705)
 
-### Builder.ioが提案する未来のAI統合
+## Builder.ioが提案する未来のAI統合
 
 記事では、AIがチームのワークフローにどのように統合されるかについて、いくつかの革新的なアプローチが紹介されています：
 
@@ -103,7 +103,7 @@ AIを活用した迅速なプロトタイピングによって、実際に構築
 
 ![](https://cdn.builder.io/api/v1/image/assets%2FYJIGb4i01jvw0SRdL5Bt%2F2b77afa8de274740b5966a159c574bab?width=705)
 
-### 結論
+## 結論
 
 著者は、AIによって誰もが一夜にして開発者になるわけではないが、開発スキルがあればあるほど、AIを活用してコードを生成し、自分自身のブロックを解除し、素晴らしいものを作ることができると結論づけています。
 
