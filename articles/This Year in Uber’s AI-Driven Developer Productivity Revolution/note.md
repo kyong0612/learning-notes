@@ -1,8 +1,9 @@
 # This Year in Uber’s AI-Driven Developer Productivity Revolution
 
-ref: |
-    <https://dpe.org/wp-content/uploads/2024/06/Adam-Huda-and-Ty-Smith-Uber-AI.pptx.pdf>
-    <https://www.youtube.com/watch?v=jp-fBw07r7c>
+ref:
+
+    - <https://dpe.org/wp-content/uploads/2024/06/Adam-Huda-and-Ty-Smith-Uber-AI.pptx.pdf>
+    - <https://www.youtube.com/watch?v=jp-fBw07r7c>
 
 ## Uberの規模（ページ2）
 
