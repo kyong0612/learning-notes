@@ -2,6 +2,24 @@
 
 ref: <https://www.youtube.com/watch?v=_MNlLhU33H0&list=PLS01nW3RtgorL3AW8REU9nGkzhvtn6Egn&index=5>
 
+1. **提供機関**: カリフォルニア大学バークレー校（UC Berkeley）
+2. **コース名**: CS 194/294-280「Advanced Large Language Model Agents」
+3. **開講時期**: 2025年春学期
+4. **主催組織**: UC BerkeleyのRDI（Research and Development Initiatives）
+5. **教授陣**:
+   - Dawn Song教授（UC Berkeley）- メイン講師
+   - Xinyun Chen（Google DeepMind）- ゲスト共同講師
+   - Kaiyu Yang（Meta FAIR）- ゲスト共同講師
+6. **ティーチングスタッフ**: Alex Pan、Tara Pande、Ashwin Dara、Jason Yan
+7. **講義時間**: 月曜日の午後4時〜6時
+8. **講義場所**: Anthro/Art Building 160
+
+このコースはLLM（大規模言語モデル）エージェントに関する高度なトピックを扱い、推論技術、計画、ツール使用、コード生成、数学的定理証明などの内容を含みます。過去のコース「Understanding Large Language Models: Foundations and Safety」の発展版として位置づけられています。
+
+講義はYouTubeでライブストリーミングされ、録画も公開されています。学部生（194）と大学院生（294）向けに開講され、単位数は1〜4単位から選択可能です。
+
+公式ウェブサイト: [http://rdi.berkeley.edu/adv-llm-agents/sp25](http://rdi.berkeley.edu/adv-llm-agents/sp25)
+
 ## 自己改善型言語モデルの研究：歴史、手法、評価、および今後の展望
 
 本稿は、近年急速に発展している自己改善型言語モデルに関する講義内容を、詳細な背景情報、補足説明、関連研究の動向および参考文献（概説）を交えながら、論理的な章立てと段落構成、箇条書きを用いて整理・再構成したものである。以下では、初期の言語モデリングの歴史から、システム１とシステム２の概念、自己評価および自己改善を実現するための最新手法、さらにその評価と今後の研究課題について詳細に解説する。
