@@ -101,9 +101,6 @@ graph TD
         F --> G
         N --> O[次のタスクリストで活用]
     end
-    
-    style 計画フェーズ（Plan） fill:#d0e0ff,stroke:#0066cc
-    style 実行フェーズ（Act） fill:#ffe0d0,stroke:#cc6600
 ```
 
 ### 5.1 計画フェーズ（Plan）
