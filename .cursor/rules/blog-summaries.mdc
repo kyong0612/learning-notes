@@ -1,0 +1,12 @@
+---
+description: 
+globs: articles/**/*
+alwaysApply: false
+---
+# Blog Post Summaries
+
+Files named `note.md` located within subdirectories of the `articles/` directory are used to store summaries of external blog posts or articles.
+
+These summaries are generated based on the content referenced, often by a URL within the `note.md` file itself.
+
+For example, see the summary for the post about AI Coding Agents: [note.md](mdc:articles/AI%20Coding%20Agent%20%E3%82%92%E4%BD%BF%E3%81%86%E3%81%93%E3%81%A8%E3%81%A7%E3%80%81%E6%80%92%E3%82%8A%E7%8B%82%E3%81%84%E3%80%81%E8%A6%96%E5%BA%A7%E3%81%8C%E4%B8%8A%E6%98%87%E3%81%99%E3%82%8B%E8%A9%B1/note.md)
