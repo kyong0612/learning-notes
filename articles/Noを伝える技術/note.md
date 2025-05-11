@@ -1,4 +1,23 @@
-# Title
+---
+title: なぜNoと言わなければいけなのか？
+source: https://speakerdeck.com/aki_iinuma/nowochuan-eruji-shu-number-pmconf2021
+author:
+  - 
+published:
+created: 2024-09-20
+description: |-
+  なぜNoと言わなければいけなのか？
+  - できることの多さは必ずしもプロダクトの価値と直結しない
+  - でもYesというのはNoの何倍も容易
+  　　-　ステークホルダーよりもチームからネガティブなリアクションを受ける方が気分的に楽
+tags:
+  - コミュニケーション
+  - 交渉術
+  - 意思決定
+  - プロダクトマネジメント
+  - ステークホルダーマネジメント
+---
+
 
 ref: <https://speakerdeck.com/aki_iinuma/nowochuan-eruji-shu-number-pmconf2021>
 
