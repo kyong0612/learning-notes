@@ -1,0 +1,181 @@
+{
+  "main": {
+    "id": "73ef2caeab8f2e3e",
+    "type": "split",
+    "children": [
+      {
+        "id": "3ff81df11fc68b89",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "64655f364801b7b1",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "mode": "preview",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "note"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "84f5da2ef8695282",
+    "type": "split",
+    "children": [
+      {
+        "id": "46b4a67fa37d4181",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4a3c52c0f9bbdc28",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "9be51c73ea99c0f5",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "4ac5db433d2d04a7",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "0b5f713a42140a9a",
+    "type": "split",
+    "children": [
+      {
+        "id": "52f560cb1c4f9519",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6c15e9a96e994cff",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for note"
+            }
+          },
+          {
+            "id": "57e552a99141cc3b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from note"
+            }
+          },
+          {
+            "id": "78ef854d77bfae79",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a373012694db6f28",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline of note"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "64655f364801b7b1",
+  "lastOpenFiles": [
+    "Clippings/The Power of Stories Narrative Priming Shapes How LLM Agents Collaborate and Compete.md",
+    "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+    "Clippings",
+    "templates/template_note.md",
+    "README.md",
+    "2025-05-11.md",
+    "Untitled.canvas"
+  ]
+}
