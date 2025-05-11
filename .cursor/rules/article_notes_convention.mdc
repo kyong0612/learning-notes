@@ -1,6 +1,6 @@
 ---
-description:
-globs:
+description: 
+globs: *.md
 alwaysApply: false
 ---
 # Article Notes Convention
