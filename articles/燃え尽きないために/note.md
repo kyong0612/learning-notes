@@ -1,3 +1,18 @@
+---
+title: 燃え尽きないために
+source: https://note.com/dora_e_m/n/nd3789ad02ae2
+author:
+  - 
+published: 
+created: 2024-07-29 # あとで正しい日付に更新してください
+description: |
+  この記事は、「燃え尽き症候群」について、その定義、原因、筆者の経験に基づく兆候、そして燃え尽きないための対策と回復について述べたものです。
+tags:
+  - 燃え尽き症候群
+  - メンタルヘルス
+  - 仕事術
+---
+
 # 燃え尽きないために
 
 ref: <https://note.com/dora_e_m/n/nd3789ad02ae2>
