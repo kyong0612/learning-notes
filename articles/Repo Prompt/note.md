@@ -1,3 +1,20 @@
+---
+title: Repo Prompt
+source: https://www.repoprompt.com/
+author:
+  - Eric Provencher
+published: 
+created: 
+description: |
+  Repo Prompt は、macOS ネイティブアプリケーションで、強力な AI モデルを活用してコードの反復処理を効率化することを目指しています。開発者が AI を使ってファイルを直接編集したり、AI モデル (Chapati や Cloud など) 向けの最適化されたプロンプトを容易に作成したりすることを支援します。
+tags:
+  - AI
+  - Coding Tool
+  - macOS
+  - Developer Tool
+  - Prompt Engineering
+---
+
 # Repo Prompt
 
 ref: <https://www.repoprompt.com/>

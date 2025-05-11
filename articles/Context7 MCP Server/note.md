@@ -1,4 +1,19 @@
-# Context7 MCP Server
+---
+title: Context7 MCP Server
+source: https://github.com/upstash/context7
+author:
+  - upstash
+published:
+created: 2025-04-22
+description: |
+  Context7 MCP Server は、LLMが最新のライブラリドキュメントを取得するために、以下の2つの主要なツールを提供します。
+tags:
+  - Context7
+  - MCP
+  - LLM
+  - Documentation
+  - Library
+---
 
 ref: <https://github.com/upstash/context7>
 

@@ -1,3 +1,20 @@
+---
+title: 共創するアーキテクチャ ～チーム全体で築く持続可能な開発エコシステム～ / Co-Creating Architecture - A Sustainable Development Ecosystem Built by the Entire Team
+source: https://speakerdeck.com/bitkey/co-creating-architecture-a-sustainable-development-ecosystem-built-by-the-entire-team
+author:
+  - 佐藤 拓人
+published: 2024-11-26
+created: 2024-12-10
+description: |
+  ソフトウェアアーキテクチャの本質は、単なる「良い設計図」を作ることではなく、チーム全体で継続的に設計図を進化させ続けることができる仕組みを作ることです。
+tags:
+  - ソフトウェアアーキテクチャ
+  - チーム開発
+  - モブプログラミング
+  - BDD
+  - イベントストーミング
+---
+
 # 共創するアーキテクチャ ～チーム全体で築く持続可能な開発エコシステム～ / Co-Creati
 
 ref: <https://speakerdeck.com/bitkey/co-creating-architecture-a-sustainable-development-ecosystem-built-by-the-entire-team>

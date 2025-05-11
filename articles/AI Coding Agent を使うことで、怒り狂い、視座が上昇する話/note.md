@@ -1,3 +1,19 @@
+---
+title: AI Coding Agent を使うことで、怒り狂い、視座が上昇する話
+source: https://blog.3qe.us/entry/2025/05/03/000513
+author:
+  - Windymelt
+published: 2025-05-03
+created: 2025-05-04
+description: |
+  AI Coding Agent との対話はマネジメント体験そのものであり、これにより視座が上昇し、過去のマネージャーへの感謝の念が生まれる。
+tags:
+  - AI Coding Agent
+  - マネジメント
+  - ソフトウェア開発
+  - 視座
+---
+
 # AI Coding Agent を使うことで、怒り狂い、視座が上昇する話
 
 ref: <https://blog.3qe.us/entry/2025/05/03/000513>

@@ -1,4 +1,18 @@
-# stagehand
+---
+title: stagehand
+source: https://github.com/browserbase/stagehand
+author:
+published:
+created: 2025-04-20
+description: |
+  Stagehandは、シンプルさと拡張性に焦点を当てたAIによるウェブブラウジング自動化フレームワークです。
+tags:
+  - AI
+  - Web Automation
+  - Playwright
+  - Browser Automation
+  - TypeScript
+---
 
 ref: <https://github.com/browserbase/stagehand>
 

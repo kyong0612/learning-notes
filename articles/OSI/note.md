@@ -1,3 +1,22 @@
+---
+title: OSI参照モデルにおけるL3,L4L7の違いについて
+source: https://www.cloudflare.com/learning/ddos/glossary/open-systems-interconnection-model-osi/
+author:
+  - 
+published: 
+created: 2024-11-11
+description: |
+  OSI参照モデルのL3, L4, L7の各層の特徴、セキュリティ対策、そしてロードバランサーにおける実装例について解説
+tags:
+  - OSI参照モデル
+  - L3
+  - L4
+  - L7
+  - ネットワーク
+  - セキュリティ
+  - ロードバランサー
+---
+
 # OSI参照モデルにおけるL3,L4L7の違いについて
 
 ## ネットワーク層（L3）

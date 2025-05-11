@@ -1,6 +1,19 @@
-# Fog of War
-
-ref: <https://remix.run/blog/fog-of-war>
+---
+title: Fog of War
+source: https://remix.run/blog/fog-of-war
+author:
+published:
+created: 2024-12-25
+description: |
+  Remixは、アプリケーションをデフォルトで高性能に保つために設計されています。その最新機能「Fog of War」（別名「遅延ルート発見」）により、アプリケーションがどれだけ大規模になっても、パフォーマンスを維持できるようになりました。
+tags:
+  - Remix
+  - React Router
+  - SSR
+  - Performance
+  - Fog of War
+  - Lazy Route Discovery
+---
 
 Remixは、アプリケーションをデフォルトで高性能に保つために設計されています。その最新機能「Fog of War」（別名「遅延ルート発見」）により、アプリケーションがどれだけ大規模になっても、パフォーマンスを維持できるようになりました。
 

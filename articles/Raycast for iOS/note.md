@@ -1,3 +1,21 @@
+---
+title: Raycast for iOS
+source: https://www.raycast.com/blog/raycast-for-ios
+author:
+  - Petr Nikolaev
+published: 2025-04-30
+created: 2025-05-01
+description: |
+  macOSで人気の生産性向上ツールRaycastが、iOSアプリとして登場しました。これにより、デスクトップ環境以外でもRaycastの主要機能を利用できるようになります。
+tags:
+  - Raycast
+  - iOS
+  - Productivity
+  - AI Chat
+  - Notes
+  - Quicklinks
+  - Snippets
+---
 # Raycast for iOS
 
 ref: <https://www.raycast.com/blog/raycast-for-ios>

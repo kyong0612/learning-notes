@@ -1,3 +1,20 @@
+---
+title: Rules
+source: https://docs.cursor.com/context/rules
+author:
+published:
+created: 2025-04-16
+description: |
+  Cursorのルール機能は、エージェントやCmd-K AIに対してシステムレベルのガイダンスを提供する方法です。これはコンテキスト、設定、ワークフローを永続的にエンコードする手段として機能します。
+tags:
+  - Cursor
+  - AI
+  - LLM
+  - Rules
+  - Context
+  - Prompt Engineering
+---
+
 # Rules
 
 ref: <https://docs.cursor.com/context/rules>

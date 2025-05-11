@@ -1,3 +1,19 @@
+---
+title: Nano ID について調べてみた
+source: https://mryhryki.com/blog/memo/20240529-134635.html
+author:
+  - mryhryki
+published: 
+created: 2025-05-02
+description: |
+  この記事は、JavaScriptライブラリである [Nano ID](https://github.com/ai/nanoid) について調査した結果をまとめたものです。
+tags:
+  - Nano ID
+  - UUID
+  - JavaScript
+  - Library
+  - ID Generation
+---
 # Nano ID について調べてみた
 
 ref: <https://mryhryki.com/blog/memo/20240529-134635.html>

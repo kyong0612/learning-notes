@@ -1,4 +1,20 @@
-# 銀の弾などない
+---
+title: 銀の弾などない
+source: https://ja.wikipedia.org/wiki/%E9%8A%80%E3%81%AE%E5%BC%BE%E3%81%AA%E3%81%A9%E3%81%AA%E3%81%84
+author:
+  - フレデリック・ブルックス
+published:
+created: 2025-04-27
+description: |
+  フレデリック・ブルックスが1986年に著したソフトウェア工学に関する著名な論文『銀の弾などない— ソフトウェアエンジニアリングの本質と偶有的事項』（No Silver Bullet - essence and accidents of software engineering）の概要です。
+tags:
+  - ソフトウェア工学
+  - ブルックス
+  - 銀の弾
+  - 人月の神話
+  - 本質的複雑性
+  - 偶有的複雑性
+---
 
 ref: <https://ja.wikipedia.org/wiki/%E9%8A%80%E3%81%AE%E5%BC%BE%E3%81%AA%E3%81%A9%E3%81%AA%E3%81%84>
 

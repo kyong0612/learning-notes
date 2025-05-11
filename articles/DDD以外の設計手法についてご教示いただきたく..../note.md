@@ -1,3 +1,19 @@
+---
+title: DDD以外の設計手法についてご教示いただきたく
+source: https://mond.how/ja/topics/s59m9b463oo69lq/owfc6zzax4sofzq
+author:
+  - 
+published: 
+created: 2024-11-25
+description: |
+  DDDが設計手法の主流となっている現状への違和感
+tags:
+  - DDD
+  - 設計手法
+  - リポジトリパターン
+  - ソフトウェアアーキテクチャ
+---
+
 # DDD以外の設計手法についてご教示いただきたく
 
 ref: <https://mond.how/ja/topics/s59m9b463oo69lq/owfc6zzax4sofzq>

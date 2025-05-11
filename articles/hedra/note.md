@@ -1,3 +1,21 @@
+---
+title: hedra
+source: https://www.hedra.com/
+author:
+  - Hedra
+published: 
+created: 2025-03-17
+description: |
+  Hedraは、次世代のマルチモーダルコンテンツ作成プラットフォームを提供する企業で、主力製品のHedra StudioはCharacter-3などのAIモデルを活用し高品質な動画、画像、音声を生成可能。
+tags:
+  - AI
+  - マルチモーダル
+  - 動画生成
+  - 画像生成
+  - 音声生成
+  - Hedra
+---
+
 # hedra
 
 ref: <https://www.hedra.com/>

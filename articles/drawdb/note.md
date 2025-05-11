@@ -1,3 +1,21 @@
+---
+title: drawdb
+source: https://github.com/drawdb-io/drawdb
+author:
+  - drawdb-io
+published: 
+created: 2025-04-27
+description: |
+  drawDBは、ブラウザ上で動作する、無料かつシンプルで直感的なデータベーススキーマエディタおよびSQLジェネレーターです。数クリックでダイアグラムを構築し、SQLスクリプトをエクスポートしたり、エディタをカスタマイズしたりできます。アカウント作成は不要です。
+tags:
+  - Database Schema
+  - ERD
+  - SQL Generator
+  - JavaScript
+  - React
+  - Open Source
+---
+
 # drawdb
 
 ref: <https://github.com/drawdb-io/drawdb>

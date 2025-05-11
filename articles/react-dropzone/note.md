@@ -1,4 +1,19 @@
-# react-dropzone
+---
+title: react-dropzone
+source: https://react-dropzone.js.org/
+author:
+  - 
+published: 
+created: 2025-05-02
+description: |
+  `react-dropzone` は、HTML5のドラッグアンドドロップ機能をReactアプリケーションで簡単に実装するためのシンプルなライブラリです。主にフック (`useDropzone`) を使用して、ファイルドロップゾーンを作成します。
+tags:
+  - React
+  - JavaScript
+  - Drag and Drop
+  - File Input
+  - UI Library
+---
 
 ref: <https://react-dropzone.js.org/>
 

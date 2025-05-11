@@ -1,3 +1,20 @@
+---
+title: Productivity
+source: https://blog.samaltman.com/productivity/
+author:
+  - Sam Altman
+published:
+created: 2025-04-22
+description: |
+  この記事は、Sam Altman氏が考える生産性向上のためのヒントをまとめたものです。単なる時間管理術だけでなく、何に取り組むか、どのように優先順位をつけるか、そして心身のコンディションをどう整えるかといった、より本質的な側面に焦点を当てています。
+tags:
+  - Productivity
+  - Time Management
+  - Prioritization
+  - Work-Life Balance
+  - Sam Altman
+---
+
 # Productivity
 
 ref: <https://blog.samaltman.com/productivity/>

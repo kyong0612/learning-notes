@@ -1,3 +1,19 @@
+---
+title: Hallucination Leaderboard
+source: https://github.com/vectara/hallucination-leaderboard
+author:
+  - Vectara
+published: 
+created: 
+description: |
+  Vectara社が提供する、大規模言語モデル（LLM）が短いドキュメントを要約する際にどの程度の頻度でハルシネーション（幻覚、もっともらしい誤情報）を生成するかを比較する公開リーダーボードです。
+tags:
+  - LLM
+  - Hallucination
+  - AI Benchmark
+  - Vectara
+---
+
 # Hallucination Leaderboard
 
 ref: <https://github.com/vectara/hallucination-leaderboard>

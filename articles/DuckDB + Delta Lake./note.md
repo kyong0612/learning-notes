@@ -1,3 +1,18 @@
+---
+title: DuckDB + Delta Lake
+source: https://dataengineeringcentral.substack.com/p/duckdb-delta-lake
+author:
+  - 
+published: 
+created: 2024-11-27
+description: |
+  ローカル環境での検証 - 1000万行のデータを使用してDuckDBとDelta Lakeの性能を検証
+tags:
+  - DuckDB
+  - Delta Lake
+  - Data Engineering
+---
+
 # DuckDB + Delta Lake
 
 ref: <https://dataengineeringcentral.substack.com/p/duckdb-delta-lake>

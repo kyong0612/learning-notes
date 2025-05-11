@@ -1,3 +1,20 @@
+---
+title: "@quramy/prisma-fabbrica"
+source: https://github.com/Quramy/prisma-fabbrica
+author:
+  - Quramy
+published: 
+created: 2025-05-04
+description: |
+  `@quramy/prisma-fabbrica` は、Prisma ORMのためのモデルファクトリーを生成するライブラリです。テストデータやシードデータの生成を容易にします。
+tags:
+  - Prisma
+  - ORM
+  - TypeScript
+  - Testing
+  - Database
+  - Node.js
+---
 # @quramy/prisma-fabbrica
 
 ref: <https://github.com/Quramy/prisma-fabbrica>

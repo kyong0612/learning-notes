@@ -1,3 +1,21 @@
+---
+title: Function calling using LLMs
+source: https://martinfowler.com/articles/function-call-LLM.html
+author:
+  - 
+published: 
+created: 
+description: |
+  この記事は、LLM（大規模言語モデル）が外部システムと連携するための「Function calling」機能について解説しています。LLMは直接関数を実行するのではなく、関数呼び出しを記述したデータ構造を生成し、それを別のプログラムが実行します。
+tags:
+  - LLM
+  - Function Calling
+  - Tool Calling
+  - AI
+  - Martin Fowler
+  - MCP
+---
+
 # Function calling using LLMs
 
 ref: <https://martinfowler.com/articles/function-call-LLM.html>

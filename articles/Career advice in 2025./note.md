@@ -1,3 +1,19 @@
+---
+title: Career advice in 2025
+source: https://lethain.com/career-advice-2025/
+author:
+  - 
+published: 
+created: 2025-03-17
+description: |
+  評価基準の根本的変化: 2010-2020年: 「チーム構築力」「採用能力」「人材保持力」「モチベーション喚起力」が主要評価指標 2025年現在: 「詳細作業への没頭力」「ペース加速」「LLM技術への適応力」に価値シフト
+tags:
+  - Career
+  - LLM
+  - Tech Industry
+  - "2025"
+---
+
 # Career advice in 2025
 
 ref: <https://lethain.com/career-advice-2025/>

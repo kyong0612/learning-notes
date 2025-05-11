@@ -1,3 +1,21 @@
+---
+title: What is openCypher?
+source: https://opencypher.org/
+author:
+  - Neo4j, Inc.
+published: 
+created: 2025-05-01
+description: |
+  openCypher は、プロパティグラフデータベースで最も広く採用されているクエリ言語である Cypher® のオープンソース仕様です。Cypher は [Neo4j®](https://neo4j.com/) によって開発されました。
+tags:
+  - openCypher
+  - Cypher
+  - GQL
+  - Graph Database
+  - Query Language
+  - Neo4j
+---
+
 # What is openCypher?
 
 ref: <https://opencypher.org/>

@@ -1,3 +1,21 @@
+---
+title: abacus
+source: https://abacus.ai/
+author:
+  - Abacus.AI
+published: 
+created: 2025-04-05
+description: |
+  Abacus.AIは、最先端の生成AI技術に基づいた「世界初のAIスーパーアシスタント」を提供し、個人向けのChatLLMや企業向けのAbacus.AI Enterpriseを展開するテクノロジー企業。
+tags:
+  - AI
+  - LLM
+  - AIエージェント
+  - RAG
+  - CodeLLM
+  - Abacus.AI
+---
+
 # abacus
 
 ref: <https://abacus.ai/>

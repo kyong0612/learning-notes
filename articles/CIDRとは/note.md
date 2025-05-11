@@ -1,3 +1,20 @@
+---
+title: CIDRとは
+source: https://wa3.i-3-i.info/word11989.html
+author:
+  - 
+published: 
+created: 2024-10-23
+description: |
+  CIDR (Classless Inter-Domain Routing) は、IPアドレスの割り当てと経路選択を柔軟に行う仕組みで、従来のクラスフルアドレッシングの無駄を解消し効率的なIPアドレス管理を可能にする。
+tags:
+  - CIDR
+  - IPアドレス
+  - サブネットマスク
+  - ネットワーク
+  - ルーティング
+---
+
 # CIDRとは
 
 ref: <https://wa3.i-3-i.info/word11989.html>
