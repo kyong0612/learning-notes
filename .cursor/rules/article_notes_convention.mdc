@@ -1,0 +1,54 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Article Notes Convention
+
+Markdown files named `note.md` located within subdirectories of the `articles/`, `books/`, `movies/`, and `researches/` directories are used for storing notes and summaries of external content (articles, blog posts, books, videos, research papers, etc.).
+
+## Frontmatter Structure
+
+These `note.md` files should adhere to the following frontmatter template:
+
+```yaml
+---
+title: {{title_of_the_content}}
+source: {{url_or_source_of_the_content}}
+author:
+  - {{author_name_if_applicable}}
+published: {{publication_date_if_applicable}}
+created: {{file_creation_date_YYYY-MM-DD}}
+description: |
+  {{brief_summary_or_initial_thoughts_from_the_content}}
+tags:
+  - {{relevant_tag_1}}
+  - {{relevant_tag_2}}
+---
+```
+
+### Field Explanations:
+
+*   **`title`**: The title of the original article, book chapter, video, etc. This can often be extracted from the first H1 heading if not present in existing frontmatter.
+*   **`source`**: The URL of the original content, or a reference to the source material (e.g., book title). This can often be found in a line starting with `ref:` or similar.
+*   **`author`**: The author(s) of the original content. May need to be manually added or inferred.
+*   **`published`**: The publication date of the original content. May need to be manually added or inferred.
+*   **`created`**: The date the `note.md` file was created in `YYYY-MM-DD` format. This is derived from the file system's creation timestamp.
+*   **`description`**: A brief summary or the initial section of the note. This can be extracted from the beginning of the document body.
+*   **`tags`**: Relevant keywords or tags derived from the content of the note. These help in categorizing and finding notes.
+
+## Example
+
+An example of a processed note can be found at [articles/Noを伝える技術/note.md](mdc:articles/No%E3%82%92%E4%BC%9D%E3%81%88%E3%82%8B%E6%8A%80%E8%A1%93/note.md).
+
+## Exclusions
+
+Files named `README.md`, especially those within `assets/` subdirectories, are generally **not** subject to this frontmatter convention.
+
+## Processing Notes
+
+When updating these files:
+1.  Preserve existing content in the body of the note.
+2.  Attempt to populate frontmatter fields from existing frontmatter if available.
+3.  If frontmatter is missing or incomplete, try to infer `title`, `source`, `created`, `description`, and `tags` as described above.
+4.  Fields like `author` and `published` often require manual input if not explicitly stated in the note.
