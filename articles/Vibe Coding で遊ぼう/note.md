@@ -1,11 +1,12 @@
 ---
 title: Vibe Coding で遊ぼう
-source: 　https://zenn.dev/schroneko/articles/lets-play-with-vibe-coding
+source: https://zenn.dev/schroneko/articles/lets-play-with-vibe-coding
 author:
   - ぬこぬこ
 published: 2025-04-26
-created: 2025-05-11 21:03:39
-description: この記事では、Andrej Karpathy氏によって提唱された「Vibe Coding」という新しいコーディングスタイルについて解説します。Vibe Codingは、LLM（大規模言語モデル）の能力を最大限に活用し、コードの詳細な理解やレビューを省略して、直感や「バイブ」に基づいて開発を進めるアプローチです。記事では、Vibe Codingの定義、利点、注意点、そして具体的なツールとしてAnthropicのClaude CodeとOpenAIのCodex CLIのセットアップ方法や使い方を紹介しています。
+created: 2025-05-11
+description: |
+  この記事では、Andrej Karpathy氏によって提唱された「Vibe Coding」という新しいコーディングスタイルについて解説します。Vibe Codingは、LLM（大規模言語モデル）の能力を最大限に活用し、コードの詳細な理解やレビューを省略して、直感や「バイブ」に基づいて開発を進めるアプローチです。記事では、Vibe Codingの定義、利点、注意点、そして具体的なツールとしてAnthropicのClaude CodeとOpenAIのCodex CLIのセットアップ方法や使い方を紹介しています。
 tags:
   - Vibe Coding
   - LLM
