@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
-                "mode": "preview",
+                "file": "articles/DevOps & Continuous Testing/DevOps & Continuous Testing.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "note"
+              "title": "DevOps & Continuous Testing"
             }
           }
         ]
@@ -94,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "file": "articles/DevOps & Continuous Testing/DevOps & Continuous Testing.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +104,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for note"
+              "title": "Backlinks for DevOps & Continuous Testing"
             }
           },
           {
@@ -113,12 +113,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "file": "articles/DevOps & Continuous Testing/DevOps & Continuous Testing.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from note"
+              "title": "Outgoing links from DevOps & Continuous Testing"
             }
           },
           {
@@ -142,13 +142,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+                "file": "articles/DevOps & Continuous Testing/DevOps & Continuous Testing.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of note"
+              "title": "Outline of DevOps & Continuous Testing"
             }
           }
         ]
@@ -170,8 +170,10 @@
   },
   "active": "64655f364801b7b1",
   "lastOpenFiles": [
-    "Clippings/The Power of Stories Narrative Priming Shapes How LLM Agents Collaborate and Compete.md",
     "books/7日間でハッキングをはじめる本 TryHackMeを使って身体で覚える攻撃手法と脆弱性/note.md",
+    "articles/DevOps & Continuous Testing/DevOps & Continuous Testing.md",
+    "articles/DevOps & Continuous Testing",
+    "Clippings/The Power of Stories Narrative Priming Shapes How LLM Agents Collaborate and Compete.md",
     "Clippings",
     "templates/template_note.md",
     "README.md",
