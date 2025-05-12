@@ -1,3 +1,20 @@
+---
+title: __dirname is back in Node.js with ES modules
+source: https://www.sonarsource.com/blog/dirname-node-js-es-modules/
+author:
+  - Phil Nash
+published: 2024-03-21
+created: 
+description: |
+  ECMAScriptモジュール（またはESモジュール）は、再利用のためにJavaScriptコードをパッケージ化する新たな標準フォーマットです。Node.jsの世界ではCommonJSからESモジュールへの大規模かつ継続的な移行が進行中ですが、その過程でいくつかの摩擦が生じていました。
+tags:
+  - Node.js
+  - ESM
+  - CommonJS
+  - __dirname
+  - import.meta
+---
+
 # __dirname is back in Node.js with ES modules
 
 ref: <https://www.sonarsource.com/blog/dirname-node-js-es-modules/>
@@ -160,7 +177,7 @@ import.meta.dirname と import.meta.filename は、最新のNode.js、Deno、Bun
 
 Bunでは既に import.meta.dir と import.meta.path が実装されており、これらは同等のものです。現在、dirname と filename は dir と path のエイリアスとなっています。
 
-これらのプロパティは基盤となるファイルシステムにのみ依存するため、import.meta.url のスキームが “file:” の場合にのみ利用可能です。つまり、ブラウザ環境では利用できず、ブラウザで import.meta.dirname を使用しようとすると単に undefined が返されます。
+これらのプロパティは基盤となるファイルシステムにのみ依存するため、import.meta.url のスキームが "file:" の場合にのみ利用可能です。つまり、ブラウザ環境では利用できず、ブラウザで import.meta.dirname を使用しようとすると単に undefined が返されます。
 
 シンプルさと相互運用性の融合 A blend of simplicity and interoperability
 

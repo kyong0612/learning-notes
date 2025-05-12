@@ -1,3 +1,18 @@
+---
+title: 君は見ているが観察していないで考えるインシデントマネジメント
+source: https://speakerdeck.com/grimoh/jun-hajian-teirugaguan-cha-siteinai-dekao-eruinsidentomanezimento
+author:
+  - grimoh
+published: 
+created: 
+description: |
+  表面的な事実をただ見るだけではなく、深く観察し、本質や隠れた意味を理解すること。この考え方は「インシデントマネジメント」においても重要。
+tags:
+  - インシデントマネジメント
+  - SRE
+  - 観察
+---
+
 # "君は見ているが観察していない"で考えるインシデントマネジメント
 
 ref: <https://speakerdeck.com/grimoh/jun-hajian-teirugaguan-cha-siteinai-dekao-eruinsidentomanezimento>
