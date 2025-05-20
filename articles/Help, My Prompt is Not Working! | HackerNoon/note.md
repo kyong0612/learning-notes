@@ -112,17 +112,3 @@ LLMは、人間と同様に、思考を説明することで恩恵を受けま�
 ### 結論
 
 この記事が、プロンプトが意図したとおりに機能しない場合に実行すべき手順の順序を明確にすることを願っています。まず、通常はプロンプトエンジニアリングアプローチを試します。それが機能しない場合は、モデルを切り替えてみて、それが役立つかどうかを確認します。次のステップは、複数の相互作用するプロンプトを利用することです。最後に、他のすべての方法が失敗した場合は、ファインチューニングを検討します。
-
-If you've enjoyed this post - subscribe for more.
-
-#### THIS ARTICLE WAS FEATURED IN...[Terminal](https://terminal.hackernoon.com/help-my-prompt-is-not-working?ref=hackernoon)
-
-[
-
-Lite
-
-](<https://hackernoon.com/lite/help-my-prompt-is-not-working?ref=hackernoon)[>
-
-Hackernoon
-
-](<https://hackernoon.com/archives/2025/5/12>)
