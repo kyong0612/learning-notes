@@ -3,6 +3,7 @@ title: 科学的に限界を超える技術大全#2「思い込みが"限界"を
 source: https://ch.nicovideo.jp/article/ar2215658
 author:
   - 鈴木祐
+  - パレオな男
 published: 
 created: 2025-05-28 21:38:16
 description: |
