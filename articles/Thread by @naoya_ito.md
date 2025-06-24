@@ -8,6 +8,7 @@ created: 2025-06-24
 description:
 tags:
   - "clippings"
+  - "cloude code"
 ---
 **naoya** @naoya\_ito [2025-06-01](https://x.com/naoya_ito/status/1929073291970363545)
 
