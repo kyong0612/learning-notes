@@ -19,18 +19,18 @@ tags:
 
 * [はじめに](#introduction)
 * 入門
-* [プロンプトの基本](#practicing-basics)
-* [ワークフロー](#quick-wins)
+  * [プロンプトの基本](#practicing-basics)
+  * [ワークフロー](#quick-wins)
 * 中級
-* [より大きなタスク](#larger-tickets)
+  * [より大きなタスク](#larger-tickets)
 * 上級
-* [自動化](#automating-workflows)
-* [カスタマイズ](#customization)
+  * [自動化](#automating-workflows)
+  * [カスタマイズ](#customization)
 * 実践的な考慮事項
-* [制限事項](#limitations)
-* [コスト管理](#managing-time)
-* [セキュリティ](#security)
-* [結論](#transformation)
+  * [制限事項](#limitations)
+  * [コスト管理](#managing-time)
+  * [セキュリティ](#security)
+  * [結論](#transformation)
 
 Cognitionチーム 2025年6月 15分で読めます
 
@@ -104,7 +104,7 @@ Cognitionチーム 2025年6月 15分で読めます
 
 ## ワークフローでのエージェントの利用
 
-![クイックウィン図](/agents101/images/quick-wins.png)
+![クイックウィン図](https://devin.ai/agents101/images/quick-wins.png)
 
 エージェントとの対話の基本をマスターしたら、これらのAIヘルパーを日常のワークフローに取り入れる時です。エージェントをルーチンの一部にするための実践的な方法をいくつか紹介します。
 
@@ -152,9 +152,9 @@ Vercelは、プレビューデプロイメントを非常に簡単にするデ�
 
 ## より大きなチケットの委任
 
-![より大きなチケットのワークフロー](/agents101/images/larger-tickets-1.png)
+![より大きなチケットのワークフロー](https://devin.ai/agents101/images/larger-tickets-1.png)
 
-![より大きなチケットのワークフロー](/agents101/images/larger-tickets-2.png)
+![より大きなチケットのワークフロー](https://devin.ai/agents101/images/larger-tickets-2.png)
 
 プルリクエストのサイズと複雑さが数ファイルを超えると、一度に処理することが難しくなります。しかし、中規模から大規模のタスク（通常1〜6時間の作業）を委任する方法を習得することが、自律型エージェントが最も高いROIをもたらすところです。ほんの数分を節約するのではなく、何時間もの生産性を取り戻すことができます。小さなタスクは楽に機能するかもしれませんが、エージェントの能力を拡張してより大きなタスクを処理することが、最大のリターンをもたらします。
 
@@ -208,7 +208,7 @@ Devinでは、将来の対話を合理化するために、重要なテスト手
 
 ## ワークフローの自動化
 
-![ワークフローの自動化](/agents101/images/automating-workflows.png)
+![ワークフローの自動化](https://devin.ai/agents101/images/automating-workflows.png)
 
 エージェントは、人間よりもはるかに速く受信イベントに応答でき、人間よりも退屈で反復的な作業をはるかにいとわない。
 
