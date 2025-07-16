@@ -1,0 +1,36 @@
+{
+  "name": "auto-summarizer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "mastra dev",
+    "build": "mastra build",
+    "start": "mastra start",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": ">=20.9.0"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "1.2.12",
+    "@mastra/core": "0.10.15",
+    "@mastra/libsql": "0.11.0",
+    "@mastra/loggers": "0.10.3",
+    "@mastra/memory": "0.11.3",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.1.1",
+    "@types/node": "24.0.14",
+    "mastra": "0.10.13",
+    "typescript": "5.8.3"
+  }
+}
