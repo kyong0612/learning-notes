@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.3/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.1.1/schema.json",
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
@@ -27,7 +27,7 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsoleLog": "warn"
+        "noConsole": { "level": "warn", "options": { "allow": ["log"] } }
       }
     }
   },
@@ -39,6 +39,15 @@
     }
   },
   "files": {
-    "ignore": ["node_modules", "dist", "build", ".turbo", "coverage", "*.d.ts", "*.config.js"]
+    "includes": [
+      "**",
+      "!**/node_modules",
+      "!**/dist",
+      "!**/build",
+      "!**/.turbo",
+      "!**/coverage",
+      "!**/*.d.ts",
+      "!**/*.config.js"
+    ]
   }
 }

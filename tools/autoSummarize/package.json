@@ -10,7 +10,9 @@
     "start": "mastra start",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "format": "biome format --write ."
+    "format": "biome format --write .",
+    "run:workflow": "tsx src/run-workflow.ts",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -31,6 +33,7 @@
     "@biomejs/biome": "2.1.1",
     "@types/node": "24.0.14",
     "mastra": "0.10.13",
+    "tsx": "4.20.3",
     "typescript": "5.8.3"
   }
 }
