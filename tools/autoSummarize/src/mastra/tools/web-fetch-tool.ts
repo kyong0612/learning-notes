@@ -13,8 +13,8 @@ export const webFetchTool = createTool({
     author: z.string().optional().describe('著者名'),
     publishedDate: z.string().optional().describe('公開日'),
   }),
-  execute: async (context) => {
-    const { url } = context.context;
+  execute: async ({ context }) => {
+    const { url } = context;
 
     try {
       // URLからコンテンツを取得

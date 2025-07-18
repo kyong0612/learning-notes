@@ -7,17 +7,21 @@ async function runAutoSummarizeWorkflow() {
   try {
     // ワークフローを実行
     const workflow = mastra.getWorkflow('autoSummarizeWorkflow');
-    const result = await (workflow as any).execute({
-      targetDirectory: process.env.TARGET_DIRECTORY || autoSummarizeConfig.targetDirectory,
+    const run = await workflow.createRunAsync();
+    
+    const result = await run.start({
+      inputData: {
+        targetDirectory: process.env.TARGET_DIRECTORY || autoSummarizeConfig.targetDirectory,
+      }
     });
 
     console.log('\nWorkflow completed!');
     console.log('Result:', JSON.stringify(result, null, 2));
 
     // 処理結果をサマリー
-    if ('processedFiles' in result && result.processedFiles && result.processedFiles.length > 0) {
+    if (result?.result && 'processedFiles' in result.result && result.result.processedFiles && result.result.processedFiles.length > 0) {
       console.log('\nProcessed files summary:');
-      const typedResult = result as { processedFiles: Array<{ filename: string; status: string }> };
+      const typedResult = result.result as { processedFiles: Array<{ filename: string; status: string }> };
       for (const file of typedResult.processedFiles) {
         console.log(`- ${file.filename}: ${file.status}`);
       }

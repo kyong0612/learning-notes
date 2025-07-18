@@ -34,17 +34,6 @@ export const summaryStep = createStep({
       }),
     ),
   }),
-  suspendSchema: z.object({
-    currentFile: z.object({
-      path: z.string(),
-      filename: z.string(),
-      proposedSummary: z.string(),
-    }),
-  }),
-  resumeSchema: z.object({
-    approved: z.boolean(),
-    editedSummary: z.string().optional(),
-  }),
   execute: async ({ inputData }) => {
     console.log(`Generating summaries for ${inputData.filesWithTool.length} files`);
 

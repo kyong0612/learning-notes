@@ -25,16 +25,10 @@ export const gitDiffStep = createStep({
 
     try {
       // GitDiffツールを使用して新規ファイルを検出
-      // 注意: Mastraの現在のバージョンでは、ツールのexecuteメソッドに直接contextを渡す
-      // TODO: Mastra APIが修正されたらany型を削除する
       const result = await gitDiffTool.execute({
         context: {
           targetDirectory: targetDirectory,
         },
-        // 必要に応じて他のパラメータを追加
-        threadId: undefined,
-        resourceId: undefined,
-        runtimeContext: {},
       } as any);
 
       console.log(`Found ${result.newFiles.length} new Markdown files`);

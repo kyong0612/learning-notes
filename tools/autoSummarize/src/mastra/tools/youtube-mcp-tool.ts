@@ -14,8 +14,8 @@ export const youtubeMCPTool = createTool({
     publishedAt: z.string().describe('公開日'),
     transcript: z.string().optional().describe('字幕テキスト'),
   }),
-  execute: async (context) => {
-    const { url } = context.context;
+  execute: async ({ context }) => {
+    const { url } = context;
 
     try {
       // TODO: YouTube MCPサーバーとの連携実装

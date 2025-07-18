@@ -1,4 +1,4 @@
-import { createWorkflow } from '@mastra/core/workflows';
+import { createWorkflow } from '@mastra/core';
 import { z } from 'zod';
 import { fileParserStep } from '../steps/file-parser-step.js';
 import { gitDiffStep } from '../steps/git-diff-step.js';
@@ -8,7 +8,7 @@ import { updateFileStep } from '../steps/update-file-step.js';
 
 // ワークフローを定義
 const autoSummarizeWorkflow = createWorkflow({
-  id: 'auto-summarize-workflow',
+  id: 'autoSummarizeWorkflow',
   description: '新規追加されたMarkdownファイルを自動要約',
   inputSchema: z.object({
     targetDirectory: z.string().describe('監視対象のディレクトリパス'),

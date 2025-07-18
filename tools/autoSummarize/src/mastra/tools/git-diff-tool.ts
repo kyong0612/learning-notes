@@ -22,15 +22,24 @@ export const gitDiffTool = createTool({
       )
       .describe('新規追加されたMarkdownファイルのリスト'),
   }),
-  execute: async (context) => {
-    const { targetDirectory } = context.context;
+  execute: async ({ context }) => {
+    const { targetDirectory } = context;
 
     try {
+      // git リポジトリのルートディレクトリを取得
+      const { stdout: gitRoot } = await execAsync('git rev-parse --show-toplevel', {
+        cwd: targetDirectory,
+      });
+      const repoRoot = gitRoot.trim();
+      
+      // ターゲットディレクトリのリポジトリルートからの相対パスを取得
+      const relativeTargetPath = path.relative(repoRoot, targetDirectory);
+
       // git diffで新規追加されたファイルを検出
       // --name-status: ファイル名とステータスを表示
       // --diff-filter=A: 追加されたファイルのみ
       const { stdout } = await execAsync(`git diff --cached --name-status --diff-filter=A`, {
-        cwd: targetDirectory,
+        cwd: repoRoot,
       });
 
       // 結果をパース
@@ -44,22 +53,24 @@ export const gitDiffTool = createTool({
           return filePath;
         })
         .filter((filePath) => filePath?.endsWith('.md'))
+        .filter((filePath) => filePath?.startsWith(relativeTargetPath))
         .map((filePath) => ({
-          path: path.join(targetDirectory, filePath),
+          path: path.join(repoRoot, filePath),
           filename: path.basename(filePath),
         }));
 
       // stagedでない新規ファイルも検出
       const { stdout: unstaged } = await execAsync(`git ls-files --others --exclude-standard`, {
-        cwd: targetDirectory,
+        cwd: repoRoot,
       });
 
       const unstagedFiles = unstaged
         .trim()
         .split('\n')
         .filter((filePath) => filePath?.endsWith('.md'))
+        .filter((filePath) => filePath?.startsWith(relativeTargetPath))
         .map((filePath) => ({
-          path: path.join(targetDirectory, filePath),
+          path: path.join(repoRoot, filePath),
           filename: path.basename(filePath),
         }));
 

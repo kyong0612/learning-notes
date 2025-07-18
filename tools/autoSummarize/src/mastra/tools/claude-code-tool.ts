@@ -27,8 +27,8 @@ export const claudeCodeTool = createTool({
       })
       .describe('抽出されたメタデータ'),
   }),
-  execute: async (context) => {
-    const { content, promptPath, sourceUrl } = context.context;
+  execute: async ({ context }) => {
+    const { content, promptPath, sourceUrl } = context;
 
     try {
       // プロンプトファイルを読み込む
@@ -44,7 +44,7 @@ export const claudeCodeTool = createTool({
       await fs.writeFile(contentFile, fullContent);
 
       // Claude Code CLIコマンドを構築
-      const command = `claude-code -m claude-3-5-sonnet-20241022 "${promptContent}" < "${contentFile}"`;
+      const command = `claude --print "${promptContent}" < "${contentFile}"`;
 
       console.log('Executing Claude Code CLI...');
 
