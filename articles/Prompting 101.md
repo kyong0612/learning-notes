@@ -5,9 +5,26 @@ author:
   - "[[Anthropic]]"
 published: 2025-08-01
 created: 2025-08-03
-description: "Presented at Code w/ Claude by @anthropic-ai on May 22, 2025 in San Francisco, CA, USA.Speakers:Hannah Moran, Applied AI at @anthropic-ai Christian Ryan, App..."
+description: "Anthropicの応用AIチームによるプロンプトエンジニアリングの実践的ガイド。スウェーデンの保険会社の事故分析を例に、段階的にプロンプトを改善する方法を実演。"
 tags:
   - "clippings"
+  - "prompt-engineering"
+  - "Claude"
+  - "AI"
+  - "best-practices"
+  - "tutorial"
+topics:
+  - "プロンプトエンジニアリング基礎"
+  - "段階的プロンプト改善"
+  - "構造化プロンプト"
+  - "Few-shot学習"
+  - "拡張思考"
+event: "Code w/ Claude"
+speakers:
+  - "Hannah Moran"
+  - "Christian Ryan"
+organization: "Anthropic"
+location: "San Francisco, CA, USA"
 ---
 # Prompting 101 - 文字起こし全文
 
