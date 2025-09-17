@@ -14,108 +14,70 @@ tags:
   - "static-analysis"
 ---
 
+## TL;DR
+
+`slog.Handler` を実装したカスタムハンドラを `struct` に埋め込む場合、`WithAttrs` と `WithGroup` メソッドを明示的に実装する必要があります。これを怠ると、`slog.Logger` の `With` メソッドを呼び出した際に、カスタムハンドラが意図せず埋め込み先のデフォルトハンドラ（例: `slog.JSONHandler`）に置き換わってしまい、カスタムしたログ出力処理が機能しなくなるという問題が発生します。
+
+この問題はGoの言語仕様（埋め込みフィールドによるメソッド継承）に起因するため、コンパイルエラーにはなりません。再発防止策として、このような実装ミスを検知するための静的解析ツールを導入することが推奨されます。
+
 ## 概要
 
-Go 1.21で導入された標準の構造化ロギングパッケージ `slog` のカスタム `Handler` を実装する際に陥りがちな問題点と、その解決策、再発防止策について解説したスライド。
+この資料は、Go 1.21で導入された構造化ロギングパッケージ `slog` の `slog.Handler` インターフェースを実装する際によくある間違いについて解説しています。特に、`slog.JSONHandler` などを構造体に埋め込んでカスタムハンドラを作成した場合に発生する問題とその原因、そして解決策について詳述されています。
 
-`With` メソッドなどを利用した際に、カスタムハンドラが意図せず `slog` のデフォルトハンドラ（`JSONHandler` など）に置き換わってしまう「デグレ（先祖返り）」現象の原因と、それを防ぐための `WithAttrs` および `WithGroup` メソッドの実装の重要性、さらに静的解析による再発防止アプローチを紹介している。
+### はじめに：発生した問題
 
----
+コンテキスト (`context.Context`) に含まれる `trace_id` を自動でログに付与するカスタムハンドラを実装しました。
 
-## スライド
+![Slide 4](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_3.jpg)
 
-### イントロダクション
+このハンドラを `slog.New` でロガーに設定すると、期待通り `trace_id` がログに出力されます。
 
-![slide_0](./assets/slide_0.jpg)
+![Slide 5](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_4.jpg)
 
-![slide_1](./assets/slide_1.jpg)
+しかし、`logger.With()` を使ってロガーに属性（キーバリューペア）を追加した後、カスタムハンドラの機能が失われ、`trace_id` がログに出力されなくなってしまいました。
 
-![slide_2](./assets/slide_2.jpg)
+![Slide 7](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_6.jpg)
 
-### 問題提起：カスタムハンドラのデグレ
+### `slog` の解説と問題の原因
 
-`context` に含まれる `trace_id` を自動でログに付与するカスタムハンドラを作成。
+`slog` パッケージは、構造化されたログ出力を標準でサポートします。`slog.Handler` インターフェースを実装することで、ログの出力形式などを自由にカスタマイズできます。
 
-![slide_3](./assets/slide_3.jpg)
+今回の問題は、`slog.Logger` の `With` メソッドを呼び出した際に、自作のカスタムハンドラが、埋め込んでいた `slog.JSONHandler` に置き換わってしまった（デグレした）ことが原因でした。
 
-期待通り、カスタムハンドラによって `trace_id` がログに出力される。
+![Slide 10](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_9.jpg)
 
-![slide_4](./assets/slide_4.jpg)
+### デグレの根本原因
 
-しかし、ロガーに `With` メソッドで属性を追加すると...
+`slog.Handler` インターフェースは、`Handle` メソッドに加えて `WithAttrs` と `WithGroup` メソッドを定義しています。
 
-![slide_5](./assets/slide_5.jpg)
+カスタムハンドラ `TraceHandler` に `slog.JSONHandler` を埋め込んだ際、`WithAttrs` と `WithGroup` を明示的に実装していませんでした。
 
-`trace_id` が出力されなくなってしまう。これは、カスタムハンドラが機能しなくなったことを意味する。
+![Slide 11](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_10.jpg)
 
-![slide_6](./assets/slide_6.jpg)
+Goの仕様では、構造体に型を埋め込むと、埋め込まれた型のメソッドを自身のメソッドとして呼び出せます。そのため、`TraceHandler` のインスタンスに対して `WithAttrs` を呼び出すと、埋め込まれている `slog.JSONHandler` の `WithAttrs` が実行されます。
 
-![slide_7](./assets/slide_7.jpg)
+そして、`slog.JSONHandler` の `WithAttrs` メソッドは、新しい `slog.JSONHandler` のインスタンスを返します。
 
-### slog.Handlerの基本と問題の解説
+![Slide 13](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_12.jpg)
 
-* `slog` は、`Handler` インターフェースを実装することで、ログの出力形式などをカスタマイズできる。
-* `With` や `WithGroup` メソッドでロガーに共通の属性を追加できる。
-* **問題**: `With` メソッドを呼び出すと、自作したカスタムハンドラが意図せず `slog` のデフォルトハンドラに置き換わってしまった。
+結果として、`logger.With()` を呼び出した後のロガーは、`TraceHandler` ではなく `slog.JSONHandler` を持つことになり、カスタムした機能が失われてしまったのです。
 
-![slide_8](./assets/slide_8.jpg)
+### 解決策と再発防止
 
-### 原因の深掘り
+この問題を解決するには、カスタムハンドラ `TraceHandler` に `WithAttrs` と `WithGroup` メソッドを正しく実装する必要があります。これらのメソッド内で、`slog.JSONHandler` の同名メソッドを呼び出し、その戻り値のハンドラを新しい `TraceHandler` でラップして返すようにします。
 
-`With` メソッドを呼び出した後、ハンドラが自作の `TraceHandler` からデフォルトの `JSONHandler` に変わってしまっている。
+![Slide 15](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_14.jpg)
 
-![slide_9](./assets/slide_9.jpg)
+このようなミスはコンパイル時に検知できないため、再発防止策として静的解析が有効です。発表者はこの問題を検知するための静的解析ツール `sloganalyzer` を作成し、`go vet` で検出できるようにしました。
 
-この原因は、カスタムハンドラ `TraceHandler` に `WithAttrs` と `WithGroup` メソッドを実装していないことにある。
+![Slide 20](https://files.speakerdeck.com/presentations/746a7388dc284410946fd7137b85be13/slide_19.jpg)
 
-![slide_10](./assets/slide_10.jpg)
+### 参考資料
 
-### Goの埋め込みフィールド（Embedded Field）の挙動
-
-Goでは、構造体に別の型を埋め込むと、埋め込まれた型のメソッドを自身のメソッドとして呼び出せる。
-
-* `TraceHandler` で `WithAttrs` を呼び出す。
-* `TraceHandler` には `WithAttrs` が実装されていない。
-* そのため、埋め込まれている `slog.JSONHandler` の `WithAttrs` が呼び出される。
-
-![slide_11](./assets/slide_11.jpg)
-
-`slog.JSONHandler` の `WithAttrs` メソッドは、新しい `*slog.JSONHandler` を返す。
-
-![slide_12](./assets/slide_12.jpg)
-
-結果として、`With` を呼び出した後のロガーが持つハンドラは、元の `TraceHandler` ではなく、新しい `JSONHandler` になってしまう。これが「デグレ」の正体である。
-
-![slide_13](./assets/slide_13.jpg)
-
-### 解決策
-
-カスタムハンドラに `WithAttrs` と `WithGroup` を正しく実装する。新しいカスタムハンドラのインスタンスを返し、状態（この場合は埋め込んだハンドラ）を適切に引き継ぐようにする。
-
-![slide_14](./assets/slide_14.jpg)
-
-![slide_15](./assets/slide_15.jpg)
-
-### 再発防止策
-
-この問題は、埋め込みフィールドの仕様上、コンパイルエラーにならず発見が難しい。
-
-![slide_16](./assets/slide_16.jpg)
-
-Goの言語機能だけでは、`WithAttrs` のようなメソッドの実装を強制することはできない。
-
-![slide_17](./assets/slide_17.jpg)
-
-そこで、静的解析が有効な再発防止策となる。「言語仕様上は問題ないが、実行するとバグの原因となるコード」を検出する。
-
-![slide_18](./assets/slide_18.jpg)
-
-この問題専用の静的解析ツールを自作し、`go vet` で検出できるようにした。
-
-![slide_19](./assets/slide_19.jpg)
-
-### まとめと宣伝
-
-![slide_20](./assets/slide_20.jpg)
-
-![slide_21](./assets/slide_21.jpg)
+* **サンプルコード:**
+  * [https://go.dev/play/p/0osz4K1_4LK](https://go.dev/play/p/0osz4K1_4LK)
+  * [https://go.dev/play/p/nEpXQ2R qF4A](https://go.dev/play/p/nEpXQ2RqF4A)
+* **静的解析ツール:**
+  * [https://github.com/saki-engineering/slognalytics](https://github.com/saki-engineering/slognalytics)
+* **解説記事 (Zenn Book):**
+  * [https://zenn.dev/hsaki/books/golang-static-analysis](https://zenn.dev/hsaki/books/golang-static-analysis)
