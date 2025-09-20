@@ -103,127 +103,127 @@ Cloudflareがサーバーに名前でアクセスする*方法*を知ったの�
 
 ![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/6wXu6FMiiVz4lXsESFrBTg/e1bb13e8eef0653ab311d0800d95f391/5.png)
 
-Here’s how this works:
+動作原理は以下の通りです：
 
-1. **Force traffic through your dedicated IP.** First, you deploy a [Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) in the network that owns your dedicated IP (for example, your primary VPC in a cloud provider). All traffic you send through this tunnel will exit to the Internet with `203.0.113.9` as its source IP.
-2. **Route the banking app to that tunnel.** Next, you create a hostname route in your Zero Trust dashboard. This rule tells Cloudflare: "Any traffic destined for `bank.example.com` must be sent through this specific tunnel."
-3. **Apply your user policies.** Finally, in Cloudflare Gateway, you create your granular access rules. A low-priority [network policy](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/) blocks access to the [SNI](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/#sni) `bank.example.com` for everyone. Then, a second, higher-priority policy explicitly allows users in the "finance" group to access the [SNI](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/#sni) `bank.example.com`.
+1. **専用IPを通してトラフィックを強制する。** まず、専用IPを所有するネットワーク（例：クラウドプロバイダーのプライマリVPC）に[Cloudflare Tunnel](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)をデプロイします。このトンネルを通して送信するすべてのトラフィックは、`203.0.113.9`を送信元IPとしてインターネットに出力されます。
+2. **銀行アプリをそのトンネルにルーティングする。** 次に、Zero Trustダッシュボードでホスト名ルートを作成します。このルールはCloudflareに「`bank.example.com`宛のトラフィックはすべてこの特定のトンネルを通して送信する必要がある」と指示します。
+3. **ユーザーポリシーを適用する。** 最後に、Cloudflare Gatewayで細かいアクセスルールを作成します。低優先度の[ネットワークポリシー](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/)で全員の[SNI](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/#sni) `bank.example.com`へのアクセスをブロックします。そして、2番目の高優先度ポリシーで「finance」グループのユーザーに明示的に[SNI](https://developers.cloudflare.com/cloudflare-one/policies/gateway/network-policies/#sni) `bank.example.com`へのアクセスを許可します。
 
-Now, when a finance team member accesses the portal, their traffic is correctly routed through the tunnel and arrives with the source IP the bank expects. An employee from any other department is blocked by Gateway before their traffic even enters the tunnel. You've enforced a precise, user-based zero trust policy for a third-party service, all by using its public hostname.
+これで、財務チームメンバーがポータルにアクセスする際、そのトラフィックは正しくトンネル経由でルーティングされ、銀行が期待する送信元IPで到着します。他の部署の従業員は、トラフィックがトンネルに入る前にGatewayによってブロックされます。パブリックホスト名を使用するだけで、サードパーティサービスに対する精密なユーザーベースのゼロトラストポリシーを適用できました。
 
-## Under the hood: how hostname routing works
+## 内部構造：ホスト名ルーティングの動作原理
 
-To build this feature, we needed to solve a classic networking challenge. The routing mechanism for Cloudflare Tunnel is a core part of Cloudflare Gateway, which operates at both Layer 4 (TCP/UDP) and Layer 7 (HTTP/S) of the network stack.
+この機能を構築するために、クラシックなネットワーキングの課題を解決する必要がありました。Cloudflare Tunnelのルーティングメカニズムは、ネットワークスタックのレイヤー4（TCP/UDP）とレイヤー7（HTTP/S）の両方で動作するCloudflare Gatewayの中核部分です。
 
-Cloudflare Gateway must make a decision about which Cloudflare Tunnel to send traffic upon receipt of the very first IP packet in the connection. This means the decision must necessarily be made at Layer 4, where Gateway only sees the IP and TCP/UDP headers of a packet. IP and TCP/UDP headers contain the destination IP address, but do not contain destination *hostname*. The hostname is only found in Layer 7 data (like a TLS SNI field or an HTTP Host header), which isn't even available until after the Layer 4 connection is already established.
+Cloudflare Gatewayは、接続の最初のIPパケットを受信した時点で、どのCloudflare Tunnelにトラフィックを送信するかを決定する必要があります。これは、レイヤー4で決定を行う必要があることを意味し、ここではGatewayはパケットのIPとTCP/UDPヘッダーのみを参照できます。IPとTCP/UDPヘッダーには宛先IPアドレスが含まれていますが、宛先*ホスト名*は含まれていません。ホスト名は、レイヤー4接続が確立された後まで利用できないレイヤー7データ（TLS SNIフィールドやHTTP Hostヘッダーなど）にのみ含まれています。
 
-This creates a dilemma: how can we route traffic based on a hostname before we've even seen the hostname?
+これはジレンマを生み出します：ホスト名を見る前に、どうやってホスト名に基づいてトラフィックをルーティングできるのでしょうか？
 
-### Synthetic IPs to the rescue
+### 救世主としてのSynthetic IP
 
-The solution lies in the fact that Cloudflare Gateway also acts as a DNS resolver. This means we see the user's *intent* — the DNS query for a hostname — *before* we see the actual application traffic. We use this foresight to "tag" the traffic using a [synthetic IP address](https://blog.cloudflare.com/egress-policies-by-hostname/).
+解決策は、Cloudflare GatewayがDNSリゾルバーとしても機能するという事実にあります。これは、実際のアプリケーショントラフィックを見る*前*に、ユーザーの*意図*（ホスト名に対するDNSクエリ）を確認できることを意味します。この先見の明を利用して、[synthetic IPアドレス](https://blog.cloudflare.com/egress-policies-by-hostname/)を使用してトラフィックに「タグ付け」を行います。
 
 ![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/7Kd3x5SppGp8G4KZeO34n/67b338ca8e81db63e110dc89c7596bf6/6.png)
 
-Let’s walk through the flow:
+フローを説明しましょう：
 
-1. **DNS Query**. A user's device sends a DNS query for `canada-payroll-server.acme.local ` to the Gateway resolver.
-2. **Private Resolution**. Gateway asks the `cloudflared ` agent running in your private network to resolve the real IP for that hostname. Since `cloudflared` has access to your internal DNS, it finds the real private IP `10.4.4.4`, and sends it back to the Gateway resolver.
-3. **Synthetic Response**. Here's the key step. Gateway resolver **does not** send the real IP (`10.4.4.4`) back to the user. Instead, it temporarily assigns an *initial resolved IP* from a reserved Carrier-Grade NAT (CGNAT) address space (e.g., `100.80.10.10`) and sends the initial resolved IP back to the user's device. The initial resolved IP acts as a tag that allows Gateway to identify network traffic destined to `canada-payroll-server.acme.local`. The initial resolved IP is randomly selected and temporarily assigned from one of the two IP address ranges:
+1. **DNSクエリ**。ユーザーのデバイスが`canada-payroll-server.acme.local`のDNSクエリをGatewayリゾルバーに送信します。
+2. **プライベート解決**。Gatewayは、プライベートネットワークで実行されている`cloudflared`エージェントに、そのホスト名の実際のIPを解決するよう要求します。`cloudflared`は内部DNSにアクセスできるため、実際のプライベートIP `10.4.4.4`を見つけ、Gatewayリゾルバーに送り返します。
+3. **Synthetic応答**。ここが重要なステップです。Gatewayリゾルバーは実際のIP（`10.4.4.4`）をユーザーに送り返し**ません**。代わりに、予約されたCarrier-Grade NAT（CGNAT）アドレス空間（例：`100.80.10.10`）から*初期解決IP*を一時的に割り当て、その初期解決IPをユーザーのデバイスに送り返します。初期解決IPは、Gatewayが`canada-payroll-server.acme.local`宛のネットワークトラフィックを識別できるタグとして機能します。初期解決IPは、次の2つのIPアドレス範囲の1つからランダムに選択され、一時的に割り当てられます：
 	- IPv4: `100.80.0.0/16`
 	- IPv6: `2606:4700:0cf1:4000::/64`
-4. **Traffic Arrives**. The user's device sends its application traffic (e.g., an HTTPS request) to the destination IP it received from Gateway resolver: the initial resolved IP `100.80.10.10`.
-5. **Routing and Rewriting**. When Gateway sees an incoming packet destined for `100.80.10.10`, it knows this traffic is for `canada-payroll-server.acme.local` and must be sent through a specific Cloudflare Tunnel. It then rewrites the destination IP on the packet back to the *real* private destination IP (`10.4.4.4`) and sends it down the correct tunnel.
+4. **トラフィックの到着**。ユーザーのデバイスは、Gatewayリゾルバーから受信した宛先IP（初期解決IP `100.80.10.10`）に対してアプリケーショントラフィック（例：HTTPS要求）を送信します。
+5. **ルーティングと書き換え**。Gatewayが`100.80.10.10`宛の入力パケットを確認すると、このトラフィックが`canada-payroll-server.acme.local`用であり、特定のCloudflare Tunnelを通して送信する必要があることを認識します。その後、パケットの宛先IPを*実際の*プライベート宛先IP（`10.4.4.4`）に書き戻し、正しいトンネルに送信します。
 
-The traffic goes down the tunnel and arrives at `canada-payroll-server.acme.local` at IP (`10.4.4.4)` and the user is connected to the server without noticing any of these mechanisms. By intercepting the DNS query, we effectively tag the network traffic stream, allowing our Layer 4 router to make the right decision without needing to see Layer 7 data.
+トラフィックはトンネルを通って`canada-payroll-server.acme.local`のIP（`10.4.4.4`）に到着し、ユーザーはこれらのメカニズムに気づくことなくサーバーに接続されます。DNSクエリを傍受することで、ネットワークトラフィックストリームに効果的にタグ付けを行い、レイヤー7データを見る必要なく、レイヤー4ルーターが正しい決定を下せるようにします。
 
-## Using Gateway Resolver Policies for fine grained control
+## 細かい制御のためのGateway Resolver Policies の使用
 
-The routing capabilities we've discussed provide simple, powerful ways to connect to private resources. But what happens when your network architecture is more complex? For example, what if your private DNS servers are in one part of your network, but the application itself is in another?
+これまで説明したルーティング機能は、プライベートリソースに接続するシンプルで強力な方法を提供します。しかし、ネットワークアーキテクチャがより複雑な場合はどうでしょうか？例えば、プライベートDNSサーバーがネットワークの一部にあるが、アプリケーション自体は別の場所にある場合はどうでしょうか？
 
-With Cloudflare One, you can solve this by creating policies that separate the path for DNS resolution from the path for application traffic for the very same hostname using [Gateway Resolver Policies](https://developers.cloudflare.com/cloudflare-one/policies/gateway/resolver-policies). This gives you fine-grained control to match complex network topologies.
+Cloudflare Oneでは、[Gateway Resolver Policies](https://developers.cloudflare.com/cloudflare-one/policies/gateway/resolver-policies)を使用して、同じホスト名に対してDNS解決のパスとアプリケーショントラフィックのパスを分離するポリシーを作成することで、この問題を解決できます。これにより、複雑なネットワークトポロジーに対応する細かい制御が可能になります。
 
-Let's walk through a scenario:
+シナリオを説明しましょう：
 
-- Your private DNS resolvers, which can resolve `**acme.local**`, are located in your core datacenter, accessible only via `**tunnel-1**`.
-- The webserver for `**canada-payroll-server.acme.local**` is hosted in a specific cloud VPC, accessible only via `**tunnel-2**`.
+- `**acme.local**`を解決できるプライベートDNSリゾルバーは、コアデータセンターに配置されており、`**tunnel-1**`経由でのみアクセス可能です。
+- `**canada-payroll-server.acme.local**`のWebサーバーは特定のクラウドVPCでホストされており、`**tunnel-2**`経由でのみアクセス可能です。
 ![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/2sVMsS4DhuN2yoTlGWTK5X/e5a66330c951e7b65428f5c76b5c7b0a/7.png)
 
-Here’s how to configure this split-path routing.
+この分割パスルーティングの設定方法は以下の通りです。
 
-**Step 1: Route DNS Queries via** `**tunnel-1**`
+**ステップ1：`**tunnel-1**`経由でDNSクエリをルーティング**
 
-First, we need to tell Cloudflare Gateway how to reach your private DNS server
+まず、Cloudflare GatewayにプライベートDNSサーバーへの到達方法を伝える必要があります
 
-1. **Create an IP Route:** In the Networks > Tunnels area of your Zero Trust dashboard, create a route for the IP address of your private DNS server (e.g., `**10.131.0.5/32**`) and point it to `**tunnel-1**``.` This ensures any traffic destined for that specific IP goes through the correct tunnel to your datacenter.
+1. **IPルートを作成：** Zero TrustダッシュボードのNetworks > Tunnelsエリアで、プライベートDNSサーバーのIPアドレス（例：`**10.131.0.5/32**`）用のルートを作成し、`**tunnel-1**`を指定します。これにより、その特定のIP宛のトラフィックがデータセンターへの正しいトンネルを通ることが保証されます。
 	![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/32JcjFZXGuhDEHHlWJoF1C/4223a6f2e5b7b49015abfbfd9b4fd20f/8.png)
-2. **Create a Resolver Policy:** Go to **Gateway -> Resolver Policies** and create a new policy with the following logic:
-	- **If** the query is for the domain `**acme.local**` …
-	- **Then**... resolve it using a designated DNS server with the IP `**10.131.0.5**`.
+2. **Resolver Policyを作成：** **Gateway -> Resolver Policies**に移動し、以下のロジックで新しいポリシーを作成します：
+	- **If** クエリが`**acme.local**`ドメイン用である場合…
+	- **Then**... IP `**10.131.0.5**`の指定されたDNSサーバーを使用して解決します。
 		![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/2j8kYsD692tCRYcDKoDXvb/7dbb20f426ba47350fb0b2906046d5f0/9.png)
 
-With these two rules, any DNS lookup for `**acme.local**` from a user's device will be sent through `tunnel-1` to your private DNS server for resolution.
+これら2つのルールにより、ユーザーのデバイスからの`**acme.local**`に対するすべてのDNSルックアップは、解決のために`tunnel-1`を通してプライベートDNSサーバーに送信されます。
 
-**Step 2: Route Application Traffic via** `**tunnel-2**`
+**ステップ2：`**tunnel-2**`経由でアプリケーショントラフィックをルーティング**
 
-Next, we'll tell Gateway where to send the actual traffic (for example, HTTP/S) for the application.
+次に、アプリケーション用の実際のトラフィック（例：HTTP/S）をどこに送信するかをGatewayに指示します。
 
-**Create a Hostname Route:** In your Zero Trust dashboard, create a **hostname route** that binds `**canada-payroll-server.acme.local **` to `**tunnel-2**`.
+**ホスト名ルートを作成：** Zero Trustダッシュボードで、`**canada-payroll-server.acme.local**`を`**tunnel-2**`にバインドする**ホスト名ルート**を作成します。
 
 ![](https://cf-assets.www.cloudflare.com/zkvhlag99gkb/3Ufzpsb1FUYrM39gMiyovs/c5d10828f58b0e7c854ff9fa721e1757/10.png)
 
-This rule instructs Gateway that any application traffic (like HTTP, SSH, or any TCP/UDP traffic) for `**canada-payroll-server.acme.local**` must be sent through `**tunnel-2**` leading to your cloud VPC.
+このルールは、`**canada-payroll-server.acme.local**`に対するすべてのアプリケーショントラフィック（HTTP、SSH、または任意のTCP/UDPトラフィック）を、クラウドVPCに向かう`**tunnel-2**`を通して送信する必要があることをGatewayに指示します。
 
-Similarly to a setup without Gateway Resolver Policy, for this to work, you must delete your private network’s subnet (in this case `10.0.0.0/8`) and `100.64.0.0/10` from the [Split Tunnels Exclude](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/configure-warp/route-traffic/split-tunnels/) list. You also need to remove `.local` from the [Local Domain Fallback](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/configure-warp/route-traffic/local-domains/).
+Gateway Resolver Policyなしのセットアップと同様に、これを機能させるには、プライベートネットワークのサブネット（この場合は`10.0.0.0/8`）と`100.64.0.0/10`を[Split Tunnels Exclude](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/configure-warp/route-traffic/split-tunnels/)リストから削除する必要があります。また、[Local Domain Fallback](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/configure-warp/route-traffic/local-domains/)から`.local`を削除する必要もあります。
 
-**Putting It All Together**
+**すべてをまとめる**
 
-With these two sets of policies, the "synthetic IP" mechanism handles the complex flow:
+これら2つのポリシーセットにより、「synthetic IP」メカニズムが複雑なフローを処理します：
 
-1. A user tries to access `canada-payroll-server.acme.local`. Their device sends a DNS query to Cloudflare Gateway Resolver.
-2. This DNS query matches a Gateway Resolver Policy, causing Gateway Resolver to forward the DNS query through `tunnel-1` to your private DNS server (`10.131.0.5`).
-3. Your DNS server responds with the server’s actual private destination IP (`10.4.4.4`).
-4. Gateway receives this IP and generates a “synthetic” initial resolved IP (`100.80.10.10`) which it sends back to the user's device.
-5. The user's device now sends the HTTP/S request to the initial resolved IP (`100.80.10.10`).
-6. Gateway sees the network traffic destined for the initial resolved IP (`100.80.10.10`) and, using the mapping, knows it's for `canada-payroll-server.acme.local`.
-7. The Hostname Route now matches. Gateway sends the application traffic through tunnel-2 and rewrites its destination IP to the webserver’s actual private IP (`10.4.4.4`).
-8. The `cloudflared` agent at the end of tunnel-2 forwards the traffic to the application's destination IP (`10.4.4.4`), which is on the same local network.
+1. ユーザーが`canada-payroll-server.acme.local`にアクセスしようとします。デバイスはCloudflare Gateway ResolverにDNSクエリを送信します。
+2. このDNSクエリはGateway Resolver Policyにマッチし、Gateway Resolverが`tunnel-1`を通してプライベートDNSサーバー（`10.131.0.5`）にDNSクエリを転送します。
+3. DNSサーバーはサーバーの実際のプライベート宛先IP（`10.4.4.4`）で応答します。
+4. GatewayはこのIPを受信し、「synthetic」初期解決IP（`100.80.10.10`）を生成してユーザーのデバイスに送り返します。
+5. ユーザーのデバイスは初期解決IP（`100.80.10.10`）にHTTP/S要求を送信します。
+6. Gatewayは初期解決IP（`100.80.10.10`）宛のネットワークトラフィックを確認し、マッピングを使用して、これが`canada-payroll-server.acme.local`用であることを認識します。
+7. ホスト名ルートがマッチします。Gatewayはアプリケーショントラフィックをtunnel-2を通して送信し、宛先IPをWebサーバーの実際のプライベートIP（`10.4.4.4`）に書き換えます。
+8. tunnel-2の末端にある`cloudflared`エージェントが、同じローカルネットワーク上にあるアプリケーションの宛先IP（`10.4.4.4`）にトラフィックを転送します。
 
-The user is connected, without noticing that DNS and application traffic have been routed over totally separate private network paths. This approach allows you to support sophisticated split-horizon DNS environments and other advanced network architectures with simple, declarative policies.
+ユーザーは、DNSとアプリケーショントラフィックが完全に別々のプライベートネットワークパスを通してルーティングされていることに気づくことなく接続されます。このアプローチにより、シンプルで宣言的なポリシーで、高度なスプリットホライズンDNS環境やその他の高度なネットワークアーキテクチャをサポートできます。
 
-## What onramps does this support?
+## サポートされるオンランプは何ですか？
 
-Our hostname routing capability is built on the "synthetic IP" (also known as *initially resolved IP*) mechanism detailed earlier, which requires specific Cloudflare One products to correctly handle both the DNS resolution and the subsequent application traffic. Here’s a breakdown of what’s currently supported for connecting your users (on-ramps) and your private applications (off-ramps).
+ホスト名ルーティング機能は、前述の「synthetic IP」（*初期解決IP*とも呼ばれる）メカニズムに基づいて構築されており、DNS解決とその後のアプリケーショントラフィックの両方を適切に処理するために特定のCloudflare One製品が必要です。ユーザーの接続（オンランプ）とプライベートアプリケーション（オフランプ）について、現在サポートされている内容の詳細を以下に示します。
 
-#### Connecting Your Users (On-Ramps)
+#### ユーザーの接続（オンランプ）
 
-For end-users to connect to private hostnames, the feature currently works with [**WARP Client**](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/), agentless [**PAC files**](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/pac-files/) and [**Browser Isolation**](https://developers.cloudflare.com/cloudflare-one/policies/browser-isolation/).
+エンドユーザーがプライベートホスト名に接続するために、この機能は現在[**WARPクライアント**](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/warp/)、エージェントレスの[**PACファイル**](https://developers.cloudflare.com/cloudflare-one/connections/connect-devices/agentless/pac-files/)、および[**ブラウザ分離**](https://developers.cloudflare.com/cloudflare-one/policies/browser-isolation/)で動作します。
 
-Connectivity is also possible when users are behind [**Magic WAN**](https://developers.cloudflare.com/magic-wan/) (in active-passive mode) or [**WARP Connector**](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/private-net/warp-connector/), but it requires some additional configuration. To ensure traffic is routed correctly, you must update the routing table on your device or router to send traffic for the following destinations through Gateway:
+[**Magic WAN**](https://developers.cloudflare.com/magic-wan/)（アクティブ・パッシブモード）や[**WARPコネクタ**](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/private-net/warp-connector/)の背後にユーザーがいる場合でも接続は可能ですが、追加の設定が必要です。トラフィックが正しくルーティングされることを確保するために、以下の宛先へのトラフィックをGateway経由で送信するように、デバイスまたはルーターのルーティングテーブルを更新する必要があります：
 
-- The initially resolved IP ranges: `100.80.0.0/16` (IPv4) and `2606:4700:0cf1:4000::/64` (IPv6).
-- The private network CIDR where your application is located (e.g., `10.0.0.0/8)`.
-- The IP address of your internal DNS resolver.
-- The Gateway DNS resolver IPs: `172.64.36.1` and `172.64.36.2`.
+- 初期解決IP範囲：`100.80.0.0/16`（IPv4）および`2606:4700:0cf1:4000::/64`（IPv6）
+- アプリケーションが配置されているプライベートネットワークCIDR（例：`10.0.0.0/8`）
+- 内部DNSリゾルバーのIPアドレス
+- Gateway DNSリゾルバーIP：`172.64.36.1`および`172.64.36.2`
 
-Magic WAN customers will also need to point their DNS resolver to these Gateway resolver IPs and ensure they are running Magic WAN tunnels in active-passive mode: for hostname routing to work, DNS queries and the resulting network traffic must reach Cloudflare over the same Magic WAN tunnel. Currently, hostname routing will not work if your end users are at a site that has more than one Magic WAN tunnel actively transiting traffic at the same time.
+Magic WANの顧客は、DNSリゾルバーをこれらのGatewayリゾルバーIPに向け、Magic WANトンネルをアクティブ・パッシブモードで実行していることを確認する必要もあります：ホスト名ルーティングを機能させるには、DNSクエリとその結果のネットワークトラフィックが同じMagic WANトンネル経由でCloudflareに到達する必要があります。現在、エンドユーザーが複数のMagic WANトンネルで同時にトラフィックを送信しているサイトにいる場合、ホスト名ルーティングは機能しません。
 
-#### Connecting Your Private Network (Off-Ramps)
+#### プライベートネットワークの接続（オフランプ）
 
-On the other side of the connection, hostname-based routing is designed specifically for applications connected via [**Cloudflare Tunnel**](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) (`cloudflared`). This is currently the only supported off-ramp for routing by hostname.
+接続の反対側では、ホスト名ベースのルーティングは[**Cloudflare Tunnel**](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/)（`cloudflared`）経由で接続されたアプリケーション専用に設計されています。これは現在、ホスト名によるルーティングでサポートされている唯一のオフランプです。
 
-Other traffic off-ramps, while fully supported for IP-based routing, are not yet compatible with this specific hostname-based feature. This includes using Magic WAN, WARP Connector, or WARP-to-WARP connections as the off-ramp to your private network. We are actively working to expand support for more on-ramps and off-ramps in the future, so stay tuned for more updates.
+他のトラフィックオフランプは、IPベースのルーティングでは完全にサポートされていますが、この特定のホスト名ベースの機能とはまだ互換性がありません。これには、プライベートネットワークへのオフランプとしてMagic WAN、WARPコネクタ、またはWARP-to-WARP接続を使用することが含まれます。今後、より多くのオンランプとオフランプのサポートを拡張するために積極的に取り組んでいますので、更新情報にご注目ください。
 
-## Conclusion
+## 結論
 
-By enabling routing by hostname directly within Cloudflare Tunnel, we’re making security policies simpler, more resilient, and more aligned with how modern applications are built. You no longer need to track ever-changing IP addresses. You can now build precise, per-resource authorization policies for HTTPS applications based on the one thing that should matter: the name of the service you want to connect to. This is a fundamental step in making a zero trust architecture intuitive and achievable for everyone.
+Cloudflare Tunnel内でホスト名によるルーティングを直接可能にすることで、セキュリティポリシーをよりシンプルで、より回復力があり、現代のアプリケーションの構築方法により適合したものにしています。絶えず変化するIPアドレスを追跡する必要はもうありません。今では、重要であるべき唯一のもの、つまり接続したいサービスの名前に基づいて、HTTPSアプリケーション用の精密なリソース単位認証ポリシーを構築できます。これは、ゼロトラストアーキテクチャを誰にとっても直感的で実現可能なものにするための基本的なステップです。
 
-This powerful capability is available today, built directly into Cloudflare Tunnel and free for all Cloudflare One customers.
+この強力な機能は、Cloudflare Tunnelに直接組み込まれ、すべてのCloudflare Oneカスタマーに無料で提供されており、今日利用可能です。
 
-Ready to leave IP Lists behind for good? Get started by exploring our [developer documentation](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/private-net/cloudflared/connect-private-hostname/) to configure your first hostname route. If you're new to [Cloudflare One](https://developers.cloudflare.com/cloudflare-one/), you can sign up today and begin securing your applications and networks in minutes.
+IPリストを完全に過去のものにする準備はできましたか？最初のホスト名ルートを設定するために、[開発者向けドキュメント](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/private-net/cloudflared/connect-private-hostname/)を探索することから始めましょう。[Cloudflare One](https://developers.cloudflare.com/cloudflare-one/)が初めての場合は、今日サインアップして数分でアプリケーションとネットワークのセキュリティ確保を開始できます。
 
-Cloudflare's connectivity cloud protects [entire corporate networks](https://www.cloudflare.com/network-services/), helps customers build [Internet-scale applications efficiently](https://workers.cloudflare.com/), accelerates any [website or Internet application](https://www.cloudflare.com/performance/accelerate-internet-applications/), [wards off DDoS attacks](https://www.cloudflare.com/ddos/), keeps [hackers at bay](https://www.cloudflare.com/application-security/), and can help you on [your journey to Zero Trust](https://www.cloudflare.com/products/zero-trust/).  
-  
-Visit [1.1.1.1](https://one.one.one.one/) from any device to get started with our free app that makes your Internet faster and safer.  
-  
-To learn more about our mission to help build a better Internet, [start here](https://www.cloudflare.com/learning/what-is-cloudflare/). If you're looking for a new career direction, check out [our open positions](http://www.cloudflare.com/careers).
+Cloudflareの接続クラウドは、[企業ネットワーク全体](https://www.cloudflare.com/network-services/)を保護し、顧客が[インターネット規模のアプリケーションを効率的に構築](https://workers.cloudflare.com/)することを支援し、あらゆる[Webサイトやインターネットアプリケーション](https://www.cloudflare.com/performance/accelerate-internet-applications/)を高速化し、[DDoS攻撃を防ぎ](https://www.cloudflare.com/ddos/)、[ハッカーを寄せ付けず](https://www.cloudflare.com/application-security/)、[ゼロトラストへの旅路](https://www.cloudflare.com/products/zero-trust/)をサポートします。
+
+どのデバイスからでも[1.1.1.1](https://one.one.one.one/)にアクセスして、インターネットをより高速で安全にする無料のアプリを始めましょう。
+
+より良いインターネットの構築を支援する私たちの使命について詳しく学ぶには、[こちらから始めましょう](https://www.cloudflare.com/learning/what-is-cloudflare/)。新しいキャリアの方向性をお探しの場合は、[私たちの求人情報](http://www.cloudflare.com/careers)をご確認ください。
