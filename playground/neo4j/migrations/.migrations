@@ -1,0 +1,44 @@
+# Neo4j マイグレーション
+
+このディレクトリにはNeo4j用のデータベースマイグレーションスクリプトが含まれています。
+
+## 命名規則
+
+マイグレーションファイルは以下のパターンに従います：
+- `{タイムスタンプ}__{説明}.cypher`
+- タイムスタンプ形式: `YYYYMMDDHHmmss`
+- 例: `20240101120000__create_initial_constraints.cypher`
+
+## ファイル構成
+
+- `20240101000000__create_initial_constraints.cypher` - 初期ユニーク制約
+- `20240101000001__create_indexes.cypher` - パフォーマンス用インデックス
+- `20240101000002__create_relationships.cypher` - リレーションシップパターンとインデックス
+
+## 実行方法
+
+以下のコマンドを使用します：
+```bash
+make migrate      # 未実行のマイグレーションをすべて実行
+make migrate-info # マイグレーション状態を確認
+```
+
+## 新しいマイグレーションの追加
+
+### 方法1: Makeコマンドを使用（推奨）
+```bash
+make migrate-create DESC=add_user_constraint
+```
+
+### 方法2: 手動作成
+1. タイムスタンプ付きファイルを新規作成
+   ```bash
+   touch migrations/$(date +%Y%m%d%H%M%S)__description.cypher
+   ```
+2. Cypherコマンドを記述
+3. 開発環境でテスト
+4. `make migrate` を実行して適用
+
+## チーム開発での利点
+
+タイムスタンプベースの命名により、複数の開発者が同時に異なるマイグレーションを作成しても競合が発生しません。マイグレーションは時系列順に自動的に適用されます。
