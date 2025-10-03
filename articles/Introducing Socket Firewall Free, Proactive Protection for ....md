@@ -24,11 +24,15 @@ Socket Firewallの紹介: ソフトウェアサプライチェーンを無料で
 
 ![Socket Firewallの紹介: ソフトウェアサプライチェーンを無料でプロアクティブに保護](https://socket.dev/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2Fcgdhsj6q%2Fproduction%2F491b895846310fa88d10f85d08ad6b098e55cef0-1200x596.png%3Fw%3D1600%26q%3D95%26fit%3Dmax%26auto%3Dformat&w=3840&q=75)
 
-かつては、npmで著名なメンテナーが乗っ取られる事件はまれな出来事でした。2018年の悪名高いevent-stream攻撃のようなインシデントは、衝撃的な例外として語られてきました。しかし今では状況が一変しています。ここ数週間だけでも、信頼されていたオープンソースパッケージが[tinycolor](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages)、[nx](https://socket.dev/blog/nx-packages-compromised)、[eslint-config-prettier](https://socket.dev/blog/npm-phishing-campaign-leads-to-prettier-tooling-packages-compromise)の侵害で相次いで標的となりました。
+かつては、npmで著名なメンテナーが乗っ取られる事件はまれな出来事でした。2018年の悪名高いevent-stream攻撃のようなインシデントは、衝撃的な例外として語られてきました。
+
+しかし今では状況が一変しています。ここ数週間だけでも、信頼されていたオープンソースパッケージが[tinycolor](https://socket.dev/blog/tinycolor-supply-chain-attack-affects-40-packages)、[nx](https://socket.dev/blog/nx-packages-compromised)、[eslint-config-prettier](https://socket.dev/blog/npm-phishing-campaign-leads-to-prettier-tooling-packages-compromise)の侵害で相次いで標的となりました。
 
 かつて例外的だった出来事が、メンテナー本人を狙うますます巧妙なソーシャルエンジニアリングによって、ぞっとするほど日常的になっています。その結果、オープンソースに依存する開発者や組織を守るには、従来型の防御だけでは不十分になりました。
 
-Socketはこれまで、サプライチェーン攻撃が最悪の事態を招くことを防ぐ手助けをしてきました。しかし攻撃者はプロダクション環境だけを狙っているわけではありません。開発者のマシンで直接悪意のあるコードを実行し、プロダクションに到達する前に被害を与えようともします。
+Socketはこれまで、サプライチェーン攻撃が最悪の事態を招くことを防ぐ手助けをしてきました。
+
+しかし攻撃者はプロダクション環境だけを狙っているわけではありません。開発者のマシンで直接悪意のあるコードを実行し、プロダクションに到達する前に被害を与えようともします。
 
 このギャップを埋めるべく、私たちは**Socket Firewall Free**を発表します。これは開発者マシンをリアルタイムで保護し、悪意ある依存関係がラップトップやビルドシステムに届く前にブロックする軽量ツールです。導入は簡単で、**APIキーも設定も不要**です。
 
@@ -38,7 +42,11 @@ Socket Firewallの動作例です。`npm i -g sfw`でインストールし、パ
 
 ## エコシステム全体へ広がる保護
 
-すでに「safe npm」ツールを使ったことがあるなら、Socket Firewallにもすぐに慣れるはずです。`npm install`実行時に悪意ある依存関係をインストールさせない点は同じですが、機能はそれ以上に広がっています。JavaScriptに加えてPythonやRustもカバーし、さらに多くのエコシステム対応が迅速に追加される予定です。「safe npm」を使い続けることもできますが、私たちはSocket Firewallを次のステップと捉えており、エコシステム横断でインストールを守る標準的なアプローチになると考えています。
+すでに「safe npm」ツールを使ったことがあるなら、Socket Firewallにもすぐに慣れるはずです。`npm install`実行時に悪意ある依存関係をインストールさせない点は同じですが、機能はそれ以上に広がっています。
+
+JavaScriptに加えてPythonやRustもカバーし、さらに多くのエコシステム対応が迅速に追加される予定です。
+
+「safe npm」を使い続けることもできますが、私たちはSocket Firewallを次のステップと捉えており、エコシステム横断でインストールを守る標準的なアプローチになると考えています。
 
 Socket Firewall Freeは、以下のパッケージマネージャー経由でのマルウェア取得を防ぎます。
 
@@ -60,7 +68,9 @@ sfw cargo fetch
 sfw uv pip install flask
 ```
 
-Socket Firewallは問題のあるトップレベル依存関係だけを守るわけではありません。悪意が知られている推移的依存関係についても、パッケージマネージャーが取得しようとした時点でブロックします。内部では一時的なHTTPプロキシを立ち上げ、サブプロセスのトラフィックを傍受して、パッケージがダウンロード・解凍・インストールされる前にSocket APIで安全性を確認します。
+Socket Firewallは問題のあるトップレベル依存関係だけを守るわけではありません。悪意が知られている推移的依存関係についても、パッケージマネージャーが取得しようとした時点でブロックします。
+
+内部では一時的なHTTPプロキシを立ち上げ、サブプロセスのトラフィックを傍受して、パッケージがダウンロード・解凍・インストールされる前にSocket APIで安全性を確認します。
 
 *sfwパッケージをSocketに譲渡してくれた[Amir Arad](https://github.com/amir-arad)に心から感謝します！*
 
