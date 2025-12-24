@@ -28,12 +28,15 @@ $ARGUMENTS
 上記の情報を基に、content-summarizer skillに従って以下を実行してください：
 
 ### 引数がある場合
+
 指定されたファイル `$ARGUMENTS` のfrontmatterからsource URLを読み取り、コンテンツを取得して要約を生成してください。
 
 ### 引数がない場合
+
 uncommittedなmdファイルを検出し、AskUserQuestionツールで処理対象を確認してから要約を実行してください。
 
 ### 処理フロー
+
 1. 対象ファイルのfrontmatterを解析し、source URLを取得
 2. URLタイプを判定（YouTube: youtube.com/youtu.be パターン）
 3. コンテンツ取得:
@@ -44,13 +47,16 @@ uncommittedなmdファイルを検出し、AskUserQuestionツールで処理対�
 6. AskUserQuestionで確認後、Edit toolでファイル更新
 
 ### メタデータ補完
+
 以下のfrontmatterフィールドを補完してください：
+
 - author: 著者名（`[[Name]]` 形式）
 - published: 公開日（YYYY-MM-DD形式）
 - description: 100-200文字の概要
 - tags: 関連タグ（5-10個）
 
 ### 要約構造
+
 1. 概要（1-2段落）
 2. 主要なトピック（元の構造に沿う）
 3. 重要な事実・データ
