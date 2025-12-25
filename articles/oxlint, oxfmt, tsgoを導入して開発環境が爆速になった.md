@@ -1,0 +1,290 @@
+---
+title: "oxlint, oxfmt, tsgoを導入して開発環境が爆速になった"
+source: "https://zenn.dev/dress_code/articles/d655cd7a43b936"
+author:
+  - "ぷーじ"
+published: 2025-12-24
+created: 2025-12-25
+description: |
+  TypeScriptファイルが1万ファイル以上ある大規模プロジェクトで、Rust製のoxc（oxlint, oxfmt）とTypeScript公式のtsgoを導入し、CI時間を大幅に短縮した事例。バックエンドのリント時間を92%削減（52秒→4秒）、型チェック時間を65%削減（105秒→36秒）を達成。Type-Aware Lintingの導入による型安全性向上と、導入時の課題と解決策についても詳しく解説。
+tags:
+  - "TypeScript"
+  - "oxlint"
+  - "oxc"
+  - "tsgo"
+  - "oxfmt"
+  - "CI/CD"
+  - "パフォーマンス"
+---
+
+## はじめに
+
+フロントエンド・バックエンド開発において、リンター、フォーマッター、型チェッカーはコード品質を担保する上で欠かせないツールです。しかし、プロジェクトの規模が大きくなるにつれ、これらのツールの実行時間がCI/CDのボトルネックになることがあります。
+
+この記事では、**TypeScriptファイルだけで1万ファイル以上**という規模のプロジェクトにおいて、Rust製の高速ツールチェーンである**oxc（Oxidation Compiler）**と、TypeScript公式の**TypeScript Native Preview（tsgo）**を導入することで、CI時間を大幅に削減した事例を紹介します。
+
+## 導入したツール
+
+今回導入したツールと、置き換え対象は以下の通りです。
+
+| 用途 | AsIs | ToBe |
+| --- | --- | --- |
+| リンター | ESLint (backend) / Biome (frontend) | [oxlint](https://oxc.rs/docs/guide/usage/linter) |
+| フォーマッター | Prettier (backend) / Biome (frontend) | [oxfmt](https://oxc.rs/docs/guide/usage/formatter) |
+| 型チェック | tsc | [tsgo](https://github.com/microsoft/typescript-go) |
+
+### oxc（Oxidation Compiler）とは？
+
+[oxc](https://github.com/oxc-project/oxc/)は、Rustで書かれたJavaScript/TypeScript向けのツールチェーンです。パーサー、リンター、フォーマッター、トランスパイラーなどを提供しており、その高速性が特徴です。
+
+oxcは[VoidZero](https://voidzero.dev/)のプロジェクトであり、Viteの将来のバンドラーであるRolldownにも採用されています。
+
+### TypeScript Native Preview（tsgo）とは？
+
+tsgoは、Microsoft TypeScript公式チームが開発している**TypeScript 7（TypeScriptコンパイラのGo言語によるネイティブポート）**です。従来のtscと比較して大幅な高速化を実現しています。
+
+npmパッケージは `@typescript/native-preview` として公開されており、以下のコマンドでインストールできます。
+
+```bash
+npm install @typescript/native-preview
+npx tsgo # tscと同様に使用
+```
+
+## 導入の経緯・モチベーション
+
+導入を決めた主な理由は以下の3点です。
+
+### 1. CI実行時間の短縮
+
+プロジェクトの成長に伴い、リント・型チェックのCI実行時間が増加していました。特にバックエンドではESLintの実行に約37秒、型チェックに約90秒かかっており、開発者のフィードバックループに影響を与えていました。
+
+### 2. 依存関係の削減
+
+ESLintを使用する場合、以下のような多くの依存パッケージが必要でした。
+
+* `eslint`
+* `@eslint/eslintrc`
+* `@eslint/js`
+* `typescript-eslint`
+* `eslint-config-prettier`
+* `eslint-plugin-unused-imports`
+
+oxlintへの移行により、これらを`oxlint`パッケージ1つに集約できました。
+
+### 3. Rust/Go実装による高速化の恩恵
+
+JavaScriptで実装された従来のツールと比較して、Rust（oxc）やGo（tsgo）で実装されたツールは、起動時間やパース速度において圧倒的なパフォーマンスを発揮します。
+
+## CI速度の改善結果
+
+実際のGitHub Actionsログから計測した改善結果です。CI環境は**AWS Self-Hosted Runner（Graviton4搭載の`r8gd.2xlarge`インスタンス）**で運用しています。
+
+### バックエンド
+
+| 項目 | Before (ESLint/tsc) | After (oxlint/tsgo) | 変化 |
+| --- | --- | --- | --- |
+| Lint | 52秒 | 4秒 | **-92%** |
+| Typecheck | 105秒 | 36秒 | **-65%** |
+
+バックエンドでは**Lint時間が92%削減**という驚異的な改善を達成しました。ESLintからoxlintへの移行効果が顕著に現れています。
+
+### フロントエンド
+
+| 項目 | Before (Biome) | After (oxlint + type-aware) | 変化 |
+| --- | --- | --- | --- |
+| Lint | 2秒 | 14秒 | +12秒（※） |
+| Typecheck | - | 48秒 | 独立ジョブ化 |
+
+※ フロントエンドのLint時間が増加しているのは、`--type-aware` オプションを有効化したためです。これは**意図的なトレードオフ**であり、型安全性を優先した結果です。
+
+以前はBuild内でtypecheckも実行していましたが、tsgo導入に合わせてtypecheckを独立ジョブとして分離し、並列実行できるようになりました。
+
+## Type-Aware Lintingについて
+
+フロントエンドでは、Biome時代は約2秒だったLintが、oxlint + `--type-aware` オプション有効化後は約14秒となっています。一見すると遅くなっていますが、これは**意図的なトレードオフ**です。
+
+2025年12月にAlpha版として発表されたこの機能は、内部的に `tsgo` (`typescript-go`) を活用することで、ESLintと比較して**約10倍**の高速化を実現しています。現在43個のルールがサポートされており、自動修正（`--fix`）やインライン無効化コメントなどもサポートされています。
+
+### `--type-aware` オプションの有効化
+
+今回の移行で、oxlintの `--type-aware` オプションを有効化しました。
+
+```json
+"lint": "oxlint --tsconfig ./tsconfig.json --type-aware ./src"
+```
+
+### 以前のBiomeとの違い
+
+| 項目 | Biome | oxlint + type-aware |
+| --- | --- | --- |
+| 型情報の利用 | なし | あり |
+| 実行速度 | 非常に高速 | やや遅い |
+| 検出可能なバグ | 構文ベースのみ | 型ベースのルールも |
+
+### 型ベースルールの例
+
+`--type-aware` を有効にすることで、以下のような型情報を必要とするルールが使用可能になります。
+
+```typescript
+// typescript/no-floating-promises
+// awaitされていないPromiseを検出
+async function fetchData() {
+  fetch('/api/data'); // ← 警告: Promise must be awaited or void
+}
+
+// typescript/no-misused-promises
+// 条件式でのPromiseの誤用を検出
+async function check() {
+  if (fetchData()) {
+    // ← 警告: Expected non-Promise value in a boolean context
+    // ...
+  }
+}
+```
+
+### トレードオフの判断
+
+* **以前（Biome）**: 2秒と高速だが、型情報を使った高度な静的解析ができない
+* **現在（oxlint + type-aware）**: 14秒とやや遅くなるが、Promise関連のバグなど実行時エラーになりやすい問題を事前に検出できる
+
+**品質向上と速度のトレードオフ**として、型ベースのリントを採用する判断をしました。バックエンドではLint時間が92%削減されており、プロジェクト全体としてはCI時間の短縮に成功しています。
+
+## 設定ファイルと実装詳細
+
+### package.jsonのscripts設定
+
+実際に使用しているnpm scriptsの例です。
+
+```json
+{
+  "scripts": {
+    "lint": "oxlint --tsconfig ./tsconfig.json --type-aware ./src",
+    "format": "oxfmt --write .",
+    "typecheck": "tsgo --noEmit"
+  }
+}
+```
+
+### oxlintの設定（.oxlintrc.json）
+
+```json
+{
+  "$schema": "https://docs.oxc.rs/schemas/oxlintrc.json",
+  "plugins": ["typescript", "oxc"],
+  "rules": {
+    "eqeqeq": ["error", "always", { "null": "ignore" }],
+    "no-console": ["error", { "allow": ["info", "warn", "error"] }],
+    "no-debugger": "error",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "typescript/no-floating-promises": "error",
+    "typescript/no-namespace": "off",
+    "import/no-cycle": "error"
+  }
+}
+```
+
+特に `import/no-cycle` ルールを追加することで、モジュール間の循環参照を検出できるようになりました。循環参照はバンドルサイズの増加や予期せぬ挙動の原因になるため、早期に検出できるのは嬉しいですね。
+
+### oxfmtの設定（.oxfmtrc.json）
+
+```json
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "endOfLine": "lf",
+  "experimentalSortImports": {
+    "groups": [
+      ["side-effect"],
+      ["builtin"],
+      ["external"],
+      ["internal"],
+      ["parent", "sibling", "index"]
+    ],
+    "sortSideEffects": false,
+    "newlinesBetween": false,
+    "ignoreCase": true
+  }
+}
+```
+
+`experimentalSortImports` により、import文の自動ソートも行っています。ただし、`experimental`（実験的）というプレフィックスが示す通り、コメントの配置処理などで意図しない挙動になるケースも報告されており、今後の改善に期待です。
+
+## 導入時の苦労
+
+スムーズに導入できたわけではありません。特にtsgoについては**いくつかの壁**がありました。
+
+### 大量の型エラーとの向き合い方
+
+tsgoは従来のtscよりも**型チェックが厳密**です。導入時、フロントエンドで**150箇所以上**の型エラーや既存違反が検出されました。
+
+すべてを一気に修正するのではなく、**段階的に対応する方針**を採用しました。
+
+```json
+// .oxlintrc.json
+{
+  "react-hooks/rules-of-hooks": "warn"
+  // NOTE: 151箇所の既存違反があるため、warn に設定。段階的に error に引き上げ予定。
+}
+```
+
+また、一部の型エラーについては `@ts-expect-error` コメントで一時的に抑制しています。
+
+```typescript
+// @ts-expect-error -- tsgo型推論の一時的な問題を回避
+const data = someFunction();
+```
+
+**なぜこの判断をしたか：**
+
+* 一度にすべてを修正しようとすると、リリースまでに時間がかかりすぎる
+* まずはtsgoを導入してCI高速化のメリットを享受し、型修正は別途計画的に進める
+* `warn` 設定により、新規コードでの違反は防ぎつつ、既存コードは段階的に改善
+
+これは**完璧を求めすぎて導入が頓挫するより、まず動かして徐々に改善する**という実践的なアプローチです。将来的にはすべて `error` に引き上げる予定ですが、まずは導入のハードルを下げることを優先しました。
+
+### OOMとの戦い
+
+Type-Aware Lintingは型情報を解析するため、従来よりもメモリ消費が増加します。導入当初はCIがOOM（メモリ不足）でキルされる問題に悩まされました。GitHub Actionsのメモリ制限を8GBに拡張することで解決しましたが、この辺りは環境に合わせた調整が必要です。
+
+## まとめ
+
+oxlint、oxfmt、tsgoの導入により、以下の成果を達成しました。
+
+### 定量的な成果
+
+* **リント時間（バックエンド）**: 92%削減（52秒 → 4秒）
+* **型チェック時間（バックエンド）**: 65%削減（105秒 → 36秒）
+* **型チェック（フロントエンド）**: 独立ジョブ化により48秒で完了（並列実行可能に）
+* **依存パッケージ**: ESLint関連6パッケージ → oxlint 1パッケージ
+
+※ フロントエンドのLint時間は `--type-aware` 有効化により2秒→14秒に増加していますが、これは型安全性向上のための意図的なトレードオフです。
+※ Type-Aware Lintingは型情報を解析するためメモリ使用量が増加する傾向にあり、導入時にはCIのメモリ制限（`--max-old-space-size`）の調整が必要になる点に注意が必要です。
+※ 本記事で使用したバージョン: tsgo `7.0.0-dev.20251130.1`, oxlint `1.31.0`, oxfmt `0.16.0`
+
+### 定性的な成果
+
+* 型ベースのリントルールにより、Promise関連のバグを事前に検出可能に
+* `import/no-cycle` ルールによる循環参照の検出
+* 開発者のフィードバックループの短縮
+
+### 今後の展望
+
+oxcエコシステムは急速に発展しており、今後さらなる機能追加や安定性の向上が期待されます。また、tsgoもまだプレビュー版ですが、TypeScript公式チームが開発を進めており、将来的にはtscの完全な代替となる可能性があります。
+
+2025年3月、TypeScript開発者のAnders Hejlsberg氏が「A 10x Faster TypeScript」を発表し、tsgoの存在が広く知られるようになりました。VS Codeのような150万行規模のコードベースでも約10倍の高速化を実現しているとのことで、今後の正式リリースが楽しみです。
+
+さらに、oxlintでは `--type-check` フラグによる型チェック機能も実験的にサポートされています。Type-Aware Lintingで既に型情報を解析しているため、その情報を再利用して型チェックも同時に行えるという仕組みです。将来的には `oxlint --type-aware --type-check` 一発でリントと型チェックを完結できるようになるかもしれません。
+
+新しいツールの導入には一定のリスクがありますが、CI時間の削減という明確なメリットがあり、導入する価値は十分にあると感じています。
