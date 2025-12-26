@@ -96,5 +96,3 @@ Aegisに触れて改めて思ったのは、「デザインシステムって仕
 ## 関連リンク
 
 - [Aegisに関する別記事](https://note.com/lf_designers/n/n2d7d3b1dadf3)
-
-
