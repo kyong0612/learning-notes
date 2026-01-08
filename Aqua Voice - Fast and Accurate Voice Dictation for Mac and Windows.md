@@ -171,14 +171,11 @@ print(transcript.text)
 
 ## ユーザーの声
 
-**@renkon40**
-> "There's no going back. The shock of Aqua Voice turning voice input into a 'weapon.' I can't use Mac's standard voice input anymore."
+- **@renkon40**: "There's no going back. The shock of Aqua Voice turning voice input into a 'weapon.' I can't use Mac's standard voice input anymore."
 
-**@gkossakowski**
-> "I find @aquavoice_'s voice dictation excellent for vibe coding. The effectiveness of vibing scales with how much context you can feed into the LLM. You can speak 3–4x more words per minute than you can type, and Aqua nails the low-friction experience voice needs to actually work."
+- **@gkossakowski**: "I find @aquavoice_'s voice dictation excellent for vibe coding. The effectiveness of vibing scales with how much context you can feed into the LLM. You can speak 3–4x more words per minute than you can type, and Aqua nails the low-friction experience voice needs to actually work."
 
-**@Stammy**
-> "It's like a faster Superwhisper or Wisprflow but it also has context of your screen/apps so it's even more accurate. perfect for vibe coding"
+- **@Stammy**: "It's like a faster Superwhisper or Wisprflow but it also has context of your screen/apps so it's even more accurate. perfect for vibe coding"
 
 ## 対応プラットフォーム
 
